@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  build_and_push:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,20 +36,3 @@ jobs:
         run: |
           docker tag myapp:latest $DOCKER_USERNAME/myapp:latest # Тегируйте образ
           docker push $DOCKER_USERNAME/myapp:latest # Загружайте образ на Docker Hub
-
-      - name: Deploy to Server
-        env:
-          SERVER_IP: ${{ secrets.SERVER_IP }}  # IP-адрес вашего сервера
-          SERVER_USER: ${{ secrets.SERVER_USER }} # Имя пользователя для SSH
-          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }} # Пароль для SSH
-        run: |
-          # Установите sshpass
-          sudo apt-get install sshpass
-
-          # Перезапустите Docker-контейнер на сервере, загрузив образ с Docker Hub
-          sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
-            docker pull $DOCKER_USERNAME/myapp:latest # Загрузите образ с Docker Hub
-            docker stop myapp || true # Остановите контейнер, если он работает
-            docker rm myapp || true   # Удалите контейнер, если он существует
-            docker run -d --name myapp -p 8585:8080 $DOCKER_USERNAME/myapp:latest # Запустите новый контейнер
-          EOF
