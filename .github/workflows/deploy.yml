@@ -1,0 +1,28 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t myapp:latest .
+          docker tag myapp:latest yourdockerhub/myapp:latest
+          docker push yourdockerhub/myapp:latest
+
+      - name: Deploy to Server
+        run: |
+          ssh user@yourserver "docker pull yourdockerhub/myapp:latest && docker stop myapp || true && docker rm myapp || true && docker run -d -p 8080:8080 --name myapp yourdockerhub/myapp:latest"
