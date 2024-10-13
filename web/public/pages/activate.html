@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-blue-50 min-h-screen flex flex-col justify-center items-center py-12 px-4 md:px-0">
+    <!-- Логотип -->
+    <div class="mb-6">
+        <img src="https://via.placeholder.com/80" alt="Logo" class="w-20 h-20">
+    </div>
+
+    <!-- Приветственный текст -->
+    <div class="text-center mb-8">
+        <h1 class="text-2xl md:text-3xl font-semibold text-blue-600">Добро пожаловать!<br>Давайте настроим сервер</h1>
+        <p class="text-blue-400 mt-2 text-sm md:text-base">Заполните все поля перед тем как нажать кнопку "Завершить"</p>
+    </div>
+
+    <!-- Форма активации -->
+    <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-sm md:max-w-md">
+        <form>
+            <!-- Введите код активации -->
+            <div class="mb-4">
+                <label for="activation-code" class="block text-gray-700 font-semibold mb-2 text-sm md:text-base">Введите код активации</label>
+                <input type="text" id="activation-code" placeholder="Activation Code"
+                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm md:text-base">
+            </div>
+
+            <!-- Порт базы данных -->
+            <div class="mb-4">
+                <label for="db-port" class="block text-gray-700 font-semibold mb-2 text-sm md:text-base">Порт базы данных</label>
+                <input type="text" id="db-port" placeholder="Port"
+                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm md:text-base">
+            </div>
+
+            <!-- Имя пользователя базы данных -->
+            <div class="mb-4">
+                <label for="db-username" class="block text-gray-700 font-semibold mb-2 text-sm md:text-base">Имя пользователя базы данных</label>
+                <input type="text" id="db-username" placeholder="Username"
+                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm md:text-base">
+            </div>
+
+            <!-- Пароль от базы данных -->
+            <div class="mb-6">
+                <label for="db-password" class="block text-gray-700 font-semibold mb-2 text-sm md:text-base">Пароль базы данных</label>
+                <input type="password" id="db-password" placeholder="Password"
+                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm md:text-base">
+            </div>
+
+            <!-- Кнопка активации -->
+            <button type="submit"
+                class="w-full bg-blue-500 text-white font-semibold py-2 md:py-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition transform hover:scale-105 text-sm md:text-base">
+                Завершить
+            </button>
+        </form>
+    </div>
+</body>
+
+</html>

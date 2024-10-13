@@ -1,0 +1,9 @@
+activate: false
+env: local
+http_server:
+    address: 127.0.0.1:8384
+    idle_timeout: 60s
+    timeout: 4s
+password: alex
+port: "5444"
+user: alex
