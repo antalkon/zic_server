@@ -7,3 +7,9 @@ type Room struct {
 	On        bool       `gorm:"default:true" json:"on"`
 	Computers []Computer `gorm:"foreignKey:RoomID" json:"computers"` // Указываем внешний ключ для связи
 }
+
+type RoomCount struct {
+	Count int64  `json:"count"`
+	On    int64  `json:"on"`
+	Color string `json:"color"`
+}

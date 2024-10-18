@@ -29,7 +29,9 @@
         }
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
+    {{template "toasts.html" .}}
 
     <!-- Header -->
     {{template "header.html" .}}
@@ -82,8 +84,8 @@
                     <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400">Активных кабинетов</h3>
                     <div class="flex justify-between items-end">
                         <div class="flex items-center">
-                            <div class="w-3 h-3 rounded-full bg-green-500 pulse mr-2"></div>
-                            <span class="text-3xl font-bold text-green-500">1 из 2</span>
+                            <div id="room-online-circle" class="w-3 h-3 rounded-full bg-red-500 pulse mr-2"></div>
+                            <span id="room-online-count" class="text-3xl font-bold text-red-500">N/D</span>
                         </div>
                     </div>
                 </div>
@@ -189,37 +191,54 @@
     </footer>
 
 
-
-
-    <script>
-
-$(document).ready(function() {
+<script src="/static/js/sendPost.js"></script>
+<script>
     function updatePcOnlineBlock() {
-        // Отправляем POST-запрос
-        $.post("http://localhost:8385/pc/api/count", function(data) {
-            // Устанавливаем полученные значения
-            $('#pc-online-count').text(data.on + ' из ' + data.count);
-
-            // Применяем цвет текста и кружка
-            $('#pc-online-count').removeClass().addClass('text-3xl font-bold ' + data.color);
-            $('#pc-online-circle').removeClass().addClass('w-3 h-3 rounded-full pulse mr-2 ' + data.color);
-        }).fail(function() {
-            // В случае ошибки оставляем текст "N/D" и красный цвет текста
-            $('#pc-online-count').text("N/D");
-            $('#pc-online-count').removeClass().addClass('text-3xl font-bold text-red-500');
-            $('#pc-online-circle').removeClass().addClass('w-3 h-3 rounded-full pulse mr-2 bg-red-500');
-        });
-    }
-
-    // Вызываем функцию сразу при загрузке страницы
-    updatePcOnlineBlock();
-
-    // Можно периодически обновлять данные каждые 10 секунд
-    setInterval(updatePcOnlineBlock, 10000);
-});
-
-
-    </script>
-
+     sendPostRequest('http://localhost:8385/pc/api/count', {}, function(result) {
+         const countElement = document.getElementById('pc-online-count');
+         const circleElement = document.getElementById('pc-online-circle');
+ 
+         // Удаляем все классы, кроме базовых
+         countElement.className = 'text-3xl font-bold'; // Базовые классы для текста
+         circleElement.className = 'w-3 h-3 rounded-full pulse mr-2'; // Базовые классы для кружка
+ 
+         // Динамически добавляем цвет текста и фона
+         countElement.classList.add(`text-${result.color}`);  // Для текста, динамически добавляем класс цвета
+         circleElement.classList.add(`bg-${result.color}`);    // Для кружка, динамически добавляем класс фона
+ 
+         // Обновляем текст
+         countElement.textContent = `${result.on} из ${result.count}`;
+     });
+ }
+ 
+ function updateRoomOnlineBlock() {
+     sendPostRequest('http://localhost:8385/room/api/count', {}, function(result) {
+         const countElement = document.getElementById('room-online-count');
+         const circleElement = document.getElementById('room-online-circle');  // Исправлено 'rooom' на 'room'
+ 
+         // Удаляем все классы, кроме базовых
+         countElement.className = 'text-3xl font-bold'; // Базовые классы для текста
+         circleElement.className = 'w-3 h-3 rounded-full pulse mr-2'; // Базовые классы для кружка
+ 
+         // Динамически добавляем цвет текста и фона
+         countElement.classList.add(`text-${result.color}`);  // Для текста, динамически добавляем класс цвета
+         circleElement.classList.add(`bg-${result.color}`);    // Для кружка, динамически добавляем класс фона
+ 
+         // Обновляем текст
+         countElement.textContent = `${result.on} из ${result.count}`;
+     });
+ }
+ 
+ // Вызываем функцию сразу после загрузки страницы
+ document.addEventListener("DOMContentLoaded", function() {
+     updatePcOnlineBlock(); // Обновление при загрузке страницы
+     updateRoomOnlineBlock();
+ 
+     // Повторно обновляем каждые 10 секунд (10000 миллисекунд)
+     setInterval(updatePcOnlineBlock, 10000);  // 10 секунд
+     setInterval(updateRoomOnlineBlock, 10000);  // 10 секунд
+ });
+ </script>
+ 
 </body>
 </html>

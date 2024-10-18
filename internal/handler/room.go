@@ -8,3 +8,7 @@ import (
 func AddNewRoom(c *gin.Context) {
 	sroom.NewRoom(c)
 }
+
+func RoomCount(c *gin.Context) {
+	sroom.RoomCount(c)
+}

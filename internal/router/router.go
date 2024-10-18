@@ -66,6 +66,8 @@ func SetupRoutes(r *gin.Engine) {
 	roomApi := r.Group("/room/api")
 	{
 		roomApi.POST("/new", handler.AddNewRoom)
+		roomApi.POST("/count", handler.RoomCount)
+
 	}
 
 	authApi := r.Group("/auth/api")
