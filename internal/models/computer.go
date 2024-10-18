@@ -11,3 +11,9 @@ type Computer struct {
 	Status string `gorm:"size:255;default:'Н/Д...'" json:"status"`
 	On     bool   `gorm:"default:true" json:"on"`
 }
+
+type PcCount struct {
+	Count int64  `json:"count"`
+	On    int64  `json:"on"`
+	Color string `json:"color"`
+}

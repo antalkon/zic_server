@@ -8,3 +8,7 @@ import (
 func AddNewPc(c *gin.Context) {
 	spc.AddPc(c)
 }
+
+func PcCount(c *gin.Context) {
+	spc.PcCount(c)
+}

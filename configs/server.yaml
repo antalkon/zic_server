@@ -1,7 +1,7 @@
-activate: false
+activate: true
 env: local
 http_server:
-    address: 127.0.0.1:8384
+    address: 127.0.0.1:8385
     idle_timeout: 60s
     timeout: 4s
 password: alex

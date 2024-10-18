@@ -6,6 +6,7 @@ import (
 	"github.com/antalkon/zic_server/internal/handler"
 	"github.com/antalkon/zic_server/pkg/config"
 	"github.com/antalkon/zic_server/pkg/logger"
+	"github.com/antalkon/zic_server/pkg/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -20,6 +21,7 @@ func SetupRoutes(r *gin.Engine) {
 	// Включаем стандартное логирование запросов и обработку ошибок
 	r.Use(gin.Logger())   // Логирование всех запросов
 	r.Use(gin.Recovery()) // Восстановление после паники и логирование ошибок
+	r.Use(sessions.InitSessionStore())
 
 	r.Static("/static", "./web/static")
 	r.LoadHTMLGlob("web/public/**/*")
@@ -27,7 +29,8 @@ func SetupRoutes(r *gin.Engine) {
 	main := r.Group("/")
 	{
 		if viper.GetBool("activate") {
-
+			main.GET("/", handler.LoginPage)
+			main.GET("/dashboard", handler.Dashboard)
 		} else {
 			main.GET("/", handler.ActivatePage)
 		}
@@ -47,15 +50,26 @@ func SetupRoutes(r *gin.Engine) {
 		settingsApi.POST("/activate", handler.Activate)
 	}
 
+	tools := r.Group("/tools/api")
+	{
+		tools.POST("/restart", handler.Restart)
+	}
 	// Группа маршрутов для компьютеров
 	pcApi := r.Group("/pc/api")
 	{
 		pcApi.POST("/new", handler.AddNewPc)
+		pcApi.POST("/count", handler.PcCount)
+
 		// pcApi.POST("/coment/:id")
 	}
 
 	roomApi := r.Group("/room/api")
 	{
 		roomApi.POST("/new", handler.AddNewRoom)
+	}
+
+	authApi := r.Group("/auth/api")
+	{
+		authApi.POST("/login", handler.Login)
 	}
 }

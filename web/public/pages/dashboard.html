@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <style>
+        /* Анимация для мигающего кружка */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Ограничение длины текста заголовка */
+        .truncate-title {
+            max-width: 70%;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
+
+    <!-- Header -->
+    {{template "header.html" .}}
+
+    <!-- Main Content -->
+    <main class="flex-grow px-4 py-4 mt-3 w-full max-w-[96%] mx-auto">
+
+        <!-- Баннер -->
+        {{ if not .setting }}
+            {{template "cSettingBanner.html" .}}
+        {{ end }}
+    
+        <!-- Второй бокс для основного контента -->
+        <div class="w-full bg-white dark:bg-neutral-800 rounded-lg py-6 px-6 shadow-xl mb-6 relative">
+            <!-- Кнопка обновления -->
+            <!-- Кнопка обновления -->
+            <button class="absolute top-4 right-4 w-10 h-10 rounded-lg bg-gray-200 dark:bg-neutral-600 hover:bg-gray-300 dark:hover:bg-neutral-500 flex justify-center items-center transition-colors duration-300">
+                <!-- Картинка внутри кнопки -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                  </svg>
+                              </button>
+
+        
+            <h2 class="text-2xl font-bold mb-4">Основная статистика</h2>
+            <p class="text-md mb-6">
+                Основная статистика работы системы Zentas Infromatic Class. Для получения подробной информации нажмите на нужный компонент.
+            </p>
+        
+            <!-- Пять микроблоков -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        
+                <!-- Микроблок 1 -->
+                <div id="pc-online-block" class="bg-gray-100 dark:bg-neutral-700 p-4 rounded-lg shadow relative h-40 flex flex-col justify-between">
+                    <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400">Компьютеров онлайн</h3>
+                    <div class="flex justify-between items-end">
+                        <div class="flex items-center">
+                            <!-- Кружок с анимацией -->
+                            <div id="pc-online-circle" class="w-3 h-3 rounded-full pulse mr-2 bg-red-500"></div>
+                            <!-- Динамически обновляемый текст -->
+                            <span id="pc-online-count" class="text-3xl font-bold text-red-500">N/D</span>
+                        </div>
+                    </div>
+                </div>
+                
+                
+        
+                <!-- Микроблок 2 -->
+                <div class="bg-gray-100 dark:bg-neutral-700 p-4 rounded-lg shadow relative h-40 flex flex-col justify-between">
+                    <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400">Активных кабинетов</h3>
+                    <div class="flex justify-between items-end">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-green-500 pulse mr-2"></div>
+                            <span class="text-3xl font-bold text-green-500">1 из 2</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Микроблок 3 -->
+                <div class="bg-gray-100 dark:bg-neutral-700 p-4 rounded-lg shadow relative h-40 flex flex-col justify-between">
+                    <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400">Непровереных заданий</h3>
+                    <div class="flex justify-between items-end">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-green-500 pulse mr-2"></div>
+                            <span class="text-3xl font-bold text-green-500">0</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Микроблок 4 -->
+                <div class="bg-gray-100 dark:bg-neutral-700 p-4 rounded-lg shadow relative h-40 flex flex-col justify-between">
+                    <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400">Статус системы</h3>
+                    <div class="flex justify-between items-end">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-green-500 pulse mr-2"></div>
+                            <span class="text-3xl font-bold text-green-500">Working</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Микроблок 5 -->
+                <div class="bg-gray-100 dark:bg-neutral-700 p-4 rounded-lg shadow relative h-40 flex flex-col justify-between">
+                    <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400"><span class="inline-flex items-center gap-x-1 py-1 px-2 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-500">🔨 dev</span> Облако</h3>
+                    <div class="flex justify-between items-end">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-red-500 pulse mr-2"></div>
+                            <span class="text-3xl font-bold text-red-500">N/D </span>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+        
+        <div class="w-full bg-white dark:bg-neutral-800 rounded-lg py-6 px-6 shadow-xl mb-6">
+            <h2 class="text-2xl font-bold mb-4">Действия с системой</h2>
+            <p class="text-md mb-6">
+                Выберите действие для управления системой Zentas Infromatic Class. Для выполнения действия нажмите на нужную карточку.
+            </p>
+        
+            <!-- Блок с карточками действий -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Карточка 1 -->
+                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <div class="absolute top-2 right-2">
+                        <img src="your-icon-url1.png" alt="Заблокировать компьютеры" class="w-12 h-12">
+                    </div>
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
+                        Блокировка
+                    </p>
+                </div>
+            
+                <!-- Карточка 2 -->
+                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <div class="absolute top-2 right-2">
+                        <img src="your-icon-url2.png" alt="Отключить сеть" class="w-12 h-12">
+                    </div>
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
+                        Send Link
+                    </p>
+                </div>
+            
+                <!-- Карточка 3 -->
+                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <div class="absolute top-2 right-2">
+                        <img src="your-icon-url3.png" alt="Перезагрузить все устройства" class="w-12 h-12">
+                    </div>
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
+                        Выключение компьюетров
+                    </p>
+                </div>
+            
+                <!-- Карточка 4 -->
+                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <div class="absolute top-2 right-2">
+                        <img src="your-icon-url4.png" alt="Очистить кэш всех устройств" class="w-12 h-12">
+                    </div>
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
+                        Перезагрузка комптютеров
+                    </p>
+                </div>
+            
+            </div>
+            
+            
+            </div>
+            
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-neutral-200 dark:bg-neutral-800 text-gray-900 dark:text-neutral-400 py-4">
+        <div class="container mx-auto text-center">
+            © 2024 Все права защищены.
+        </div>
+    </footer>
+
+
+
+
+    <script>
+
+$(document).ready(function() {
+    function updatePcOnlineBlock() {
+        // Отправляем POST-запрос
+        $.post("http://localhost:8385/pc/api/count", function(data) {
+            // Устанавливаем полученные значения
+            $('#pc-online-count').text(data.on + ' из ' + data.count);
+
+            // Применяем цвет текста и кружка
+            $('#pc-online-count').removeClass().addClass('text-3xl font-bold ' + data.color);
+            $('#pc-online-circle').removeClass().addClass('w-3 h-3 rounded-full pulse mr-2 ' + data.color);
+        }).fail(function() {
+            // В случае ошибки оставляем текст "N/D" и красный цвет текста
+            $('#pc-online-count').text("N/D");
+            $('#pc-online-count').removeClass().addClass('text-3xl font-bold text-red-500');
+            $('#pc-online-circle').removeClass().addClass('w-3 h-3 rounded-full pulse mr-2 bg-red-500');
+        });
+    }
+
+    // Вызываем функцию сразу при загрузке страницы
+    updatePcOnlineBlock();
+
+    // Можно периодически обновлять данные каждые 10 секунд
+    setInterval(updatePcOnlineBlock, 10000);
+});
+
+
+    </script>
+
+</body>
+</html>
