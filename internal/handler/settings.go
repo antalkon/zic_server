@@ -8,3 +8,7 @@ import (
 func SysStaus(c *gin.Context) {
 	ssettings.SystemStatus(c)
 }
+
+func SettingsPage(c *gin.Context) {
+	ssettings.SettingsPage(c)
+}

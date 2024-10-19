@@ -34,7 +34,7 @@ function updateRoomOnlineBlock() {
     });
 }
 
-function updateRoomOnlineBlock() {
+function updateStatOnlineBlock() {
     sendPostRequest('http://localhost:8385/setting/api/sys/status', {}, function(result) {
         const countElement = document.getElementById('stat-online-count');
         const circleElement = document.getElementById('stat-online-circle');  // Исправлено 'rooom' на 'room'
@@ -56,8 +56,33 @@ function updateRoomOnlineBlock() {
 document.addEventListener("DOMContentLoaded", function() {
     updatePcOnlineBlock(); // Обновление при загрузке страницы
     updateRoomOnlineBlock();
+    updateStatOnlineBlock();
 
     // Повторно обновляем каждые 10 секунд (10000 миллисекунд)
-    setInterval(updatePcOnlineBlock, 10000);  // 10 секунд
-    setInterval(updateRoomOnlineBlock, 10000);  // 10 секунд
+    // setInterval(updatePcOnlineBlock, 10000);  // 10 секунд
+    // setInterval(updateRoomOnlineBlock, 10000);  // 10 секунд
 });
+
+function refresh() {
+    showOverlay();  // Показываем overlay
+    updatePcOnlineBlock();  // Обновляем блоки
+    updateRoomOnlineBlock();
+    updateStatOnlineBlock();
+    
+    // Ждём 2 секунды (2000 миллисекунд), затем скрываем overlay
+    setTimeout(function() {
+        hideOverlay();
+    }, 1500);
+}
+
+// Функция для показа блока (меняет hidden на flex)
+function showOverlay() {
+    document.getElementById('overlay').classList.remove('hidden');
+    document.getElementById('overlay').classList.add('flex');
+}
+
+// Функция для скрытия блока (меняет flex на hidden)
+function hideOverlay() {
+    document.getElementById('overlay').classList.remove('flex');
+    document.getElementById('overlay').classList.add('hidden');
+}

@@ -31,6 +31,7 @@ func SetupRoutes(r *gin.Engine) {
 		if viper.GetBool("activate") {
 			main.GET("/", handler.LoginPage)
 			main.GET("/dashboard", handler.Dashboard)
+			main.GET("/dashboard/settings", handler.SettingsPage)
 		} else {
 			main.GET("/", handler.ActivatePage)
 		}
