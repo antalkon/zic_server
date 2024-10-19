@@ -1,0 +1,24 @@
+/* Анимация для мигающего кружка */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Ограничение длины текста заголовка */
+.truncate-title {
+    max-width: 70%;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.crs{
+    cursor:not-allowed;
+}
