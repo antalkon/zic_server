@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// LoadServerConfig загружает конфигурацию сервера из файла /configs/server.yaml
+// LoadDataConfig загружает конфигурацию из файла /configs/config.yaml
 func LoadDataConfig() error {
 	viper.SetConfigName("config")    // имя файла без расширения
 	viper.SetConfigType("yaml")      // тип файла
@@ -15,5 +15,14 @@ func LoadDataConfig() error {
 		return err
 	}
 
+	return nil
+}
+
+// SaveDataConfig сохраняет изменения конфигурации в файл
+func SaveDataConfig() error {
+	// Сохраняем изменения в файл
+	if err := viper.WriteConfig(); err != nil {
+		return err
+	}
 	return nil
 }

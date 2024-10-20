@@ -12,3 +12,11 @@ func SysStaus(c *gin.Context) {
 func SettingsPage(c *gin.Context) {
 	ssettings.SettingsPage(c)
 }
+
+func TgData(c *gin.Context) {
+	ssettings.TgData(c)
+}
+
+func TgNewData(c *gin.Context) {
+	ssettings.TgNewData(c)
+}

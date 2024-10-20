@@ -1,2 +1,6 @@
 name: admin
 password: admin
+tg_bot:
+    newtask: false
+    sysst: false
+    token: sddsfsdfsdfsfd

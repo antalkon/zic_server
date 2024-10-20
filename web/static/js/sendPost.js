@@ -1,4 +1,44 @@
 // Функция для отправки POST-запроса
+// Функция для отправки PUT-запроса
+function sendPutRequest(url, data, successCallback) {
+    return fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        // Если есть поле "success" и оно истинно
+        if (result.success) {
+            // Если есть поле "info", показываем тост
+            if (result.info) {
+                showToast(result.info);
+            }
+
+            // Если есть callback-функция successCallback, передаем туда результат
+            if (successCallback) {
+                successCallback(result);
+            }
+
+            return result;
+        } else if (result.error) {
+            // Если есть поле "error", показываем тост с ошибкой
+            showErrorToast(result.error);
+            throw new Error(result.error);
+        } else {
+            throw new Error("Unexpected response format.");
+        }
+    })
+    .catch(error => {
+        // Обработка ошибок, отображение тоста с ошибкой
+        showErrorToast(error.message);
+        console.error("Request failed:", error);
+    });
+}
+
+
 function sendPostRequest(url, data, successCallback) {
     return fetch(url, {
         method: 'POST',
@@ -67,3 +107,6 @@ function showErrorToast(message) {
 function hideToast(toastElement) {
     toastElement.classList.add('hidden');
 }
+
+
+// Функция для отправки PUT-запроса

@@ -13,38 +13,121 @@
     {{template "toasts.html" .}} <!-- Тосты для уведомлений -->
     {{template "header.html" .}} <!-- Заголовок страницы -->
 
+    <!-- Кнопка открытия меню на мобильных устройствах -->
+    <button id="menu-toggle" class="md:hidden bg-blue-500 text-white p-3 rounded-full fixed bottom-4 left-4 z-50 shadow-lg focus:outline-none">
+        Меню
+    </button>
+
     <main class="flex-grow px-4 py-4 mt-3 w-full max-w-[96%] mx-auto flex gap-8">
-        <!-- Левое меню -->
-        <aside class="w-full md:w-1/4 bg-gray-100 dark:bg-neutral-800 rounded-lg shadow p-4 flex flex-col space-y-4">
+        <!-- Левое меню, скрытое на мобильных устройствах по умолчанию -->
+        <aside id="side-menu" class="w-full md:w-1/4 bg-gray-100 dark:bg-neutral-800 rounded-lg shadow p-2 flex flex-col space-y-3 fixed inset-0 transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 z-40">
             <h2 class="text-xl font-bold text-gray-700 dark:text-white mb-4">Настройки</h2>
-            <!-- Кнопка "Безопасность" -->
-            <button class="flex items-center px-4 py-2 text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-neutral-700 rounded-lg hover:bg-gray-300 dark:hover:bg-neutral-600 transition-colors">
-                <svg class="w-6 h-6 mr-2 text-gray-500 dark:text-gray-400" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c2.5-1.5 4-3 4-5a4 4 0 10-8 0c0 2 1.5 3.5 4 5zM12 11c-2.5 1.5-4 3-4 5a4 4 0 108 0c0-2-1.5-3.5-4-5z"/>
-                </svg>
-                Безопасность
+            <button class="flex items-center px-4 py-2 text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-neutral-700 rounded-lg hover:bg-gray-300 dark:hover:bg-neutral-600 transition-colors" data-tab="main">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>                  
+                Основные
             </button>
-            <!-- Кнопка "Данные" -->
-            <button class="flex items-center px-4 py-2 text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-neutral-700 rounded-lg hover:bg-gray-300 dark:hover:bg-neutral-600 transition-colors">
+            <button class="flex items-center px-4 py-2 text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-neutral-700 rounded-lg hover:bg-gray-300 dark:hover:bg-neutral-600 transition-colors" data-tab="data">
                 <svg class="w-6 h-6 mr-2 text-gray-500 dark:text-gray-400" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M9 16h6M8 8h8M21 12c0 4.418-4.03 8-9 8S3 16.418 3 12a9 9 0 1118 0z"/>
                 </svg>
                 Данные
             </button>
-            <!-- Можно добавить другие кнопки -->
         </aside>
 
-        <!-- Основной контент -->
-        <section class="w-full md:w-3/4 bg-white dark:bg-neutral-800 rounded-lg shadow p-6">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Настройки безопасности</h2>
-            <p class="text-gray-600 dark:text-gray-300 mt-4">
-                Здесь будут отображаться настройки безопасности или выбранные параметры, в зависимости от того, какая кнопка нажата в меню.
-            </p>
-            <!-- Здесь можно добавить форму или настройки -->
+        <!-- Правая часть с настройками (может скроллиться) -->
+        <section id="content-box" class="ml-auto w-full md:w-3/4 bg-white dark:bg-neutral-800 rounded-lg shadow p-6 overflow-y-auto h-[calc(100vh-4rem)]">
+            <!-- Основные настройки -->
+            <div id="main-settings" class="settings-section">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Основные настройки</h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-4">Настройки для выбора языка и подключения Telegram бота.</p>
+                
+                <!-- Выбор языка -->
+                <div class="mb-6">
+                    <label for="language-select" class="block mb-2 text-lg font-medium text-gray-800 dark:text-white">Выберите язык</label>
+                    <select id="language-select" class="w-full p-3 border border-gray-300 rounded-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-white cursor-not-allowed" disabled>
+                        <option value="">Выберите язык...</option>
+                        <option value="ru" selected>🇷🇺 Русский</option>
+                    </select>
+                </div>
+
+                <!-- Кнопка сохранить язык -->
+                <button id="save-language-button" class="w-full p-3 bg-blue-300 text-white font-bold rounded-lg cursor-not-allowed" disabled>Сохранить язык</button>
+
+                <!-- Разделитель -->
+                <hr class="my-6 border-gray-300 dark:border-neutral-600">
+
+                <!-- Настройки Telegram бота -->
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Telegram Bot</h3>
+                <div class="mb-4">
+                    <label for="bot-token" class="block mb-2 text-lg font-medium text-gray-800 dark:text-white">Bot Token</label>
+                    <input id="tgToken" type="text" id="bot-token" class="w-full p-3 border border-gray-300 rounded-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-white" placeholder="Введите токен бота" value="">
+                </div>
+                <div class="mb-4 flex items-center">
+                    <input id="system-status" type="checkbox" class="mr-2 h-4 w-4 text-blue-600 dark:bg-neutral-800 dark:border-neutral-700">
+                    <label for="system-status" class="text-gray-800 dark:text-white">Получать уведомления о состоянии системы</label>
+                </div>
+                <div class="mb-4 flex items-center">
+                    <input id="tasks" type="checkbox" class="mr-2 h-4 w-4 text-blue-600 dark:bg-neutral-800 dark:border-neutral-700">
+                    <label for="critical-notifications" class="text-gray-800 dark:text-white">Получать о заданиях</label>
+                </div>
+
+                <!-- Кнопка сохранить настройки Telegram -->
+                <button onclick="SendPutTgUpdate()" id="save-bot-settings-button" class="w-full p-3 bg-blue-500 text-white font-bold rounded-lg">Сохранить настройки Telegram</button>
+            </div>
+
+            <!-- Настройки данных (скрыты по умолчанию) -->
+            <div id="data-settings" class="settings-section hidden">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Настройки данных</h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-4">Здесь можно изменить пароль и другие данные.</p>
+
+                <!-- Смена пароля -->
+                <div class="mb-6">
+                    <label for="password" class="block mb-2 text-lg font-medium text-gray-800 dark:text-white">Смена пароля</label>
+                    <input type="password" id="password" class="w-full p-3 border border-gray-300 rounded-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-white" placeholder="Введите новый пароль">
+                </div>
+
+                <!-- Кнопка сохранить пароль -->
+                <button id="save-password-button" class="w-full p-3 bg-blue-500 text-white font-bold rounded-lg">Сохранить пароль</button>
+            </div>
         </section>
     </main>
 
     <!-- Footer -->
     {{template "cFooter.html" .}} <!-- Футер -->
+
+    <!-- Скрипт для работы меню и переключения настроек -->
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const sideMenu = document.getElementById('side-menu');
+
+        const tabs = document.querySelectorAll('[data-tab]');
+        const settingsSections = document.querySelectorAll('.settings-section');
+
+        // Функция переключения видимости секций настроек
+        function switchTab(tabId) {
+            settingsSections.forEach(section => section.classList.add('hidden'));
+            document.getElementById(`${tabId}-settings`).classList.remove('hidden');
+        }
+
+        // Переключение табов
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        // Скрипт для мобильного меню
+        menuToggle.addEventListener('click', function() {
+            sideMenu.classList.toggle('-translate-x-full');
+        });
+
+        // Изначально показываем "Основные" настройки
+        switchTab('main');
+    </script>
+    <script src="/static/js/settings.js"></script>
 </body>
 </html>

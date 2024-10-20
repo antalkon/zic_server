@@ -50,6 +50,9 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		settingsApi.POST("/activate", handler.Activate)
 		settingsApi.POST("/sys/status", handler.SysStaus)
+		settingsApi.POST("/tg", handler.TgData)
+		settingsApi.PUT("/tg", handler.TgNewData)
+
 	}
 
 	tools := r.Group("/tools/api")
