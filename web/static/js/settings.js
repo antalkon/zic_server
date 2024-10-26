@@ -21,10 +21,11 @@ function SendPutTgUpdate() {
 
     // Создаем объект данных для отправки
     const data = {
-        token: token,
         sysSt: stat,     // Используем значение прямо из checkbox
+        token: token,
         newTask: task    // Используем значение прямо из checkbox
     };
+    console.log(data)
 
     // Отправляем PUT-запрос с данными
     sendPutRequest('/setting/api/tg', data, function(result) {
@@ -38,7 +39,7 @@ function SendPutTgUpdate() {
 
 document.addEventListener("DOMContentLoaded", function() {
     TgOnlineBlock()
-
+    SecOnlineBlock()
     // Повторно обновляем каждые 10 секунд (10000 миллисекунд)
     // setInterval(updatePcOnlineBlock, 10000);  // 10 секунд
     // setInterval(updateRoomOnlineBlock, 10000);  // 10 секунд

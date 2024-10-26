@@ -52,6 +52,12 @@ func SetupRoutes(r *gin.Engine) {
 		settingsApi.POST("/sys/status", handler.SysStaus)
 		settingsApi.POST("/tg", handler.TgData)
 		settingsApi.PUT("/tg", handler.TgNewData)
+		settingsApi.POST("/sec/network", handler.SecNetwork)
+		settingsApi.POST("/sec/firewall", handler.SecFirewall)
+		settingsApi.POST("/sec/auth", handler.SecAuth)
+		settingsApi.POST("/sec/settings", handler.SecGet)
+
+		settingsApi.GET("/info", handler.InfoVesion)
 
 	}
 

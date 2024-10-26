@@ -9,27 +9,21 @@ import (
 	"github.com/spf13/viper"
 )
 
-func TgNewData(c *gin.Context) {
-	var d models.NewDataTg
-	if err := c.ShouldBindJSON(&d); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+func Firewall(c *gin.Context) {
+	var g models.SecFirewall
+	if err := c.ShouldBindJSON(&g); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Загружаем конфигурацию
 	err := config.LoadDataConfig()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load configuration"})
 		return
 	}
 
-	// Устанавливаем новые значения
-	viper.Set("tg_bot.sysStat", d.SysStat)
+	viper.Set("sec.firewall", g.Firewall)
 
-	viper.Set("tg_bot.token", d.Token)
-	viper.Set("tg_bot.newtask", d.NewTasks)
-
-	// Сохраняем изменения в файл
 	if err := config.SaveDataConfig(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save configuration"})
 		return

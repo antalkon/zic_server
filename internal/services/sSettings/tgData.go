@@ -19,8 +19,8 @@ func TgData(c *gin.Context) {
 
 	// Извлекаем конфигурацию Telegram бота напрямую
 	token := viper.GetString("tg_bot.token")
-	sysSt := viper.GetBool("tg_bot.sysSt")
-	newTask := viper.GetBool("tg_bot.newTask")
+	sysSt := viper.GetBool("tg_bot.sysStat")
+	newTask := viper.GetBool("tg_bot.newtask")
 
 	// Формируем ответ с конфигурацией бота
 	response := gin.H{

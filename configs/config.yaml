@@ -1,6 +1,10 @@
 name: admin
 password: admin
+sec:
+    firewall: true
+    gbnet: true
+    reqauth: true
 tg_bot:
     newtask: false
-    sysst: false
-    token: sddsfsdfsdfsfd
+    sysstat: false
+    token: falsedf
