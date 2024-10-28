@@ -8,6 +8,7 @@ import (
 	"github.com/antalkon/zic_server/pkg/config"
 	pggorm "github.com/antalkon/zic_server/pkg/db/pg_gorm"
 	"github.com/antalkon/zic_server/pkg/logger"
+	"github.com/antalkon/zic_server/pkg/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -43,6 +44,9 @@ func main() {
 			return
 		}
 		fmt.Println("База данных успешно инициализирована")
+		go tools.LoadCPU()
+		go tools.LoadRAM()
+		go tools.LoadNetwork()
 	} else {
 		fmt.Println("Активация базы данных отключена в конфигурации")
 	}

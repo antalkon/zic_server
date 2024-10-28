@@ -32,6 +32,11 @@ func SetupRoutes(r *gin.Engine) {
 			main.GET("/", handler.LoginPage)
 			main.GET("/dashboard", handler.Dashboard)
 			main.GET("/dashboard/settings", handler.SettingsPage)
+			main.GET("/dashboard/load/cpu", handler.LoadCPUPage)
+			main.GET("/dashboard/load/ram", handler.LoadRAMPage)
+			main.GET("/dashboard/load/network", handler.LoadNetworkPage)
+			main.GET("/dashboard/load/storage", handler.LoadStoragePage)
+
 		} else {
 			main.GET("/", handler.ActivatePage)
 		}
@@ -64,6 +69,11 @@ func SetupRoutes(r *gin.Engine) {
 	tools := r.Group("/tools/api")
 	{
 		tools.POST("/restart", handler.Restart)
+		tools.POST("/load/cpu", handler.LoadCPU)
+		tools.POST("/load/ram", handler.LoadRAM)
+		tools.POST("/load/network", handler.LoadNetwork)
+		tools.POST("/load/storage", handler.LoadStorage)
+
 	}
 	// Группа маршрутов для компьютеров
 	pcApi := r.Group("/pc/api")

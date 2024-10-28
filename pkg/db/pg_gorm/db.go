@@ -17,6 +17,9 @@ func migrateModels() error {
 	modelsToMigrate := []interface{}{
 		&models.Computer{},
 		&models.Room{},
+		&models.CPULoad{},
+		&models.RAMLoad{},
+		&models.NetworkLoad{},
 	}
 
 	for _, model := range modelsToMigrate {

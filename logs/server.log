@@ -35,3 +35,4 @@ time="2024-10-16T16:46:08+05:00" level=error msg="Ошибка: Ошибка з�
 time="2024-10-16T16:46:53+05:00" level=error msg="Ошибка: Ошибка запуска сервера: listen tcp 127.0.0.1:8384: bind: address already in use"
 time="2024-10-16T16:47:46+05:00" level=error msg="Ошибка: Ошибка запуска сервера: listen tcp 127.0.0.1:8384: bind: address already in use"
 time="2024-10-18T20:20:10+05:00" level=error msg="Ошибка: ERROR: syntax error at or near \"on\" (SQLSTATE 42601)"
+time="2024-10-28T15:10:33+05:00" level=fatal msg="Ошибка инициализации базы данных: %v: failed to connect database: failed to connect to `host=localhost user=alex database=ZIC-SERVER-main`: dial error (dial tcp 127.0.0.1:5444: connect: connection refused)"
