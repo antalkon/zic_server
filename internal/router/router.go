@@ -32,6 +32,9 @@ func SetupRoutes(r *gin.Engine) {
 			main.GET("/", handler.LoginPage)
 			main.GET("/dashboard", handler.Dashboard)
 			main.GET("/dashboard/settings", handler.SettingsPage)
+			main.GET("/dashboard/data", handler.DataPage)
+			main.GET("/dashboard/data/room/:id", handler.RoomDataPage)
+
 			main.GET("/dashboard/load/cpu", handler.LoadCPUPage)
 			main.GET("/dashboard/load/ram", handler.LoadRAMPage)
 			main.GET("/dashboard/load/network", handler.LoadNetworkPage)
@@ -88,6 +91,9 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		roomApi.POST("/new", handler.AddNewRoom)
 		roomApi.POST("/count", handler.RoomCount)
+		roomApi.POST("/room", handler.RoomsData)
+		roomApi.POST("/room/block/:id", handler.BlockRoom)
+		roomApi.POST("/room/unblock/:id", handler.UnblockRoom)
 
 	}
 

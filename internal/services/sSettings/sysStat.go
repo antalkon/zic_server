@@ -47,45 +47,47 @@ func SystemStatus(c *gin.Context) {
 	}
 
 	// Определение максимальной нагрузки
-	maxLoad := max(cpuLoad, ramLoad)
+	// maxLoad := max(cpuLoad, ramLoad)
 
 	// Определение статуса системы на основе максимальной нагрузки
 	var status string
 	var color string
 
-	switch {
-	case maxLoad >= 100:
-		status = "Остановка"
-	case maxLoad >= 95:
-		status = "Критическое"
-	case maxLoad >= 90:
-		status = "Перегрузка"
-	case maxLoad >= 80:
-		status = "Нестабильно"
-	case maxLoad >= 70:
-		status = "Стабильно"
-	default:
-		status = "Работает"
-	}
+	// switch {
+	// case maxLoad >= 100:
+	// 	status = "Остановка"
+	// case maxLoad >= 95:
+	// 	status = "Критическое"
+	// case maxLoad >= 90:
+	// 	status = "Перегрузка"
+	// case maxLoad >= 80:
+	// 	status = "Нестабильно"
+	// case maxLoad >= 70:
+	// 	status = "Стабильно"
+	// default:
+	// 	status = "Работает"
+	// }
 
-	// Если хоть один из параметров превышает порог, возвращаем соответствующий статус
-	if networkLoad > 95 || cpuLoad > 95 || ramLoad > 95 {
-		status = "Критическое"
-		color = "red-800"
-	} else if networkLoad > 90 || cpuLoad > 90 || ramLoad > 90 {
-		status = "Перегрузка"
-		color = "orange-600"
-	} else if networkLoad > 80 || cpuLoad > 80 || ramLoad > 80 {
-		status = "Нестабильно"
-		color = "yellow-500"
-	} else if networkLoad > 70 || cpuLoad > 70 || ramLoad > 70 {
-		status = "Стабильно"
-		color = "green-700"
+	// // Если хоть один из параметров превышает порог, возвращаем соответствующий статус
+	// if networkLoad > 95 || cpuLoad > 95 || ramLoad > 95 {
+	// 	status = "Критическое"
+	// 	color = "red-800"
+	// } else if networkLoad > 90 || cpuLoad > 90 || ramLoad > 90 {
+	// 	status = "Перегрузка"
+	// 	color = "orange-600"
+	// } else if networkLoad > 80 || cpuLoad > 80 || ramLoad > 80 {
+	// 	status = "Нестабильно"
+	// 	color = "yellow-500"
+	// } else if networkLoad > 70 || cpuLoad > 70 || ramLoad > 70 {
+	// 	status = "Стабильно"
+	// 	color = "green-700"
 
-	} else {
-		status = "Работает"
-		color = "green-500"
-	}
+	// } else {
+	// 	status = "Работает"
+	// 	color = "green-500"
+	// }
+	status = "Работает"
+	color = "green-500"
 
 	// Возвращаем статус системы в JSON формате
 	c.JSON(http.StatusOK, gin.H{

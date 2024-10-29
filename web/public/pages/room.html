@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+    {{template "cBInport.html" .}}
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
+    {{template "toasts.html" .}}
+    {{template "header.html" .}}
+    {{template "cDashModals.html" .}}
+
+    <main class="flex-grow px-4 py-4 mt-3 w-full max-w-[96%] mx-auto">
+        <!-- Бокс "Действия с комнатой" -->
+        <section class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 shadow-md mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Действия с комнатой</h2>
+            <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+                <!-- Статистика о компьютерах в комнате -->
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Запущено компьютеров</h3>
+                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{.on}} из {{.count}}</p>
+                </div>
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Заблокировано</h3>
+                    <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{.blocked}}</p>
+                </div>
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">В процессе работы</h3>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{.worked}}</p>
+                </div>
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Неактивных</h3>
+                    <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{.off}}</p>
+                </div>
+            </div>
+            <hr class="my-4 border-gray-200 dark:border-neutral-700">
+            <div class="flex flex-wrap gap-2">
+                <button onclick="changeRoomStatus('{{.id}}', 'shutdown')" class="py-2 px-4 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none">Выключить все ПК</button>
+                <button onclick="changeRoomStatus('{{.id}}', 'block')" class="py-2 px-4 rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 focus:outline-none">Заблокировать все ПК</button>
+                <button onclick="changeRoomStatus('{{.id}}', 'unblock')" class="py-2 px-4 rounded-lg bg-green-600 text-white hover:bg-green-700 focus:outline-none">Разблокировать все ПК</button>
+                <button onclick="changeRoomStatus('{{.id}}', 'restart')" class="py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Перезагрузить все ПК</button>
+            </div>
+        </section>
+
+        <!-- Бокс "Таблица" для компьютеров в комнате -->
+        <section class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 shadow-md">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Список компьютеров в комнате</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white dark:bg-neutral-900 rounded-lg overflow-hidden shadow-lg">
+                    <thead>
+                        <tr class="text-left border-b border-gray-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-white">
+                            <th class="p-4">ID</th>
+                            <th class="p-4">Имя</th>
+                            <th class="p-4">Статус</th>
+                            <th class="p-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 dark:text-neutral-300">
+                        {{range .allPc}}
+                        <tr class="border-b border-gray-200 dark:border-neutral-700">
+                            <td class="p-4">{{.ID}}</td>
+                            <td class="p-4">{{.Name}}</td>
+                            <td class="p-4 {{if .On}}text-green-600 dark:text-green-400{{else}}text-red-600 dark:text-red-400{{end}}">
+                                {{if .On}}Включен{{else}}Выключен{{end}}
+                            </td>
+                            <td class="p-4 flex flex-wrap gap-2">
+                                <button onclick="controlPC('{{.ID}}', 'shutdown')" class="py-1 px-3 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none">Выключить</button>
+                                <button onclick="controlPC('{{.ID}}', 'restart')" class="py-1 px-3 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Перезагрузить</button>
+                                <button onclick="controlPC('{{.ID}}', 'block')" class="py-1 px-3 text-sm rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 focus:outline-none">Заблокировать</button>
+                                <a href="#" class="py-1 px-3 text-sm rounded-lg bg-gray-600 text-white hover:bg-gray-700 focus:outline-none">Страница</a>
+                            </td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    {{template "cFooter.html" .}}
+
+    <!-- JavaScript для отправки POST-запросов -->
+    <script>
+        // Функция для изменения статуса всех ПК в комнате
+        async function changeRoomStatus(roomId, action) {
+            const url = `/room/api/room/${action}/${roomId}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    location.reload(); // Перезагрузка страницы при успешном ответе
+                } else {
+                    alert("Ошибка при выполнении операции. Попробуйте снова.");
+                }
+            } catch (error) {
+                console.error("Ошибка при выполнении запроса:", error);
+                alert("Ошибка при соединении с сервером.");
+            }
+        }
+
+        // Функция для управления отдельным ПК
+        async function controlPC(pcId, action) {
+            const url = `/room/api/pc/${action}/${pcId}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    location.reload(); // Перезагрузка страницы при успешном ответе
+                } else {
+                    alert("Ошибка при выполнении операции. Попробуйте снова.");
+                }
+            } catch (error) {
+                console.error("Ошибка при выполнении запроса:", error);
+                alert("Ошибка при соединении с сервером.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -2,6 +2,7 @@ package handler
 
 import (
 	sdashboard "github.com/antalkon/zic_server/internal/services/sDashboard"
+	sdata "github.com/antalkon/zic_server/internal/services/sData"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,4 +24,8 @@ func LoadNetworkPage(c *gin.Context) {
 
 func LoadStoragePage(c *gin.Context) {
 	sdashboard.LoadStoragePage(c)
+}
+
+func DataPage(c *gin.Context) {
+	sdata.LoadDataPage(c)
 }
