@@ -36,3 +36,7 @@ func OffRoom(c *gin.Context) {
 func RebootRoom(c *gin.Context) {
 	sroom.Reboot(c)
 }
+
+func LinkRoom(c *gin.Context) {
+	sroom.Link(c)
+}

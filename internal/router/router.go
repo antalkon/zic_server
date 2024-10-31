@@ -89,6 +89,10 @@ func SetupRoutes(r *gin.Engine) {
 		pcApi.GET("/ping/server", handler.ServerPing)
 		pcApi.POST("/off/:id", m, handler.PcOff)
 		pcApi.POST("/reboot/:id", m, handler.PcReboot)
+		pcApi.POST("/block/:id", m, handler.PcBlock)
+		pcApi.POST("/unblock/:id", m, handler.PcUnBlock)
+		pcApi.GET("/start/:lip", handler.StartPc)
+		pcApi.GET("/screen/:lip", handler.ScreenPc)
 
 		// pcApi.POST("/coment/:id")
 	}
@@ -102,6 +106,7 @@ func SetupRoutes(r *gin.Engine) {
 		roomApi.POST("/room/unblock/:id", m, handler.UnblockRoom)
 		roomApi.POST("/room/off/:id", m, handler.OffRoom)
 		roomApi.POST("/room/reboot/:id", m, handler.RebootRoom)
+		roomApi.POST("/room/link/:id", m, handler.LinkRoom)
 
 	}
 

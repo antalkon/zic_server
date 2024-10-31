@@ -47,6 +47,8 @@
                 <button onclick="changeRoomStatus('{{.id}}', 'block')" class="py-2 px-4 rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 focus:outline-none">Заблокировать все ПК</button>
                 <button onclick="changeRoomStatus('{{.id}}', 'unblock')" class="py-2 px-4 rounded-lg bg-green-600 text-white hover:bg-green-700 focus:outline-none">Разблокировать все ПК</button>
                 <button onclick="changeRoomStatus('{{.id}}', 'reboot')" class="py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Перезагрузить все ПК</button>
+                <button onclick="openModal('url-modal')" class="py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Отправить ссылку</button>
+
             </div>
             <br>
             <p class="text-xs text-red-500">После выполнения действия отображаемые данные обновляются от 1 до 10 минут. Чтобы отображаемые данные обновились перезагрузите страницу.</p>
@@ -54,7 +56,7 @@
 
         <!-- Бокс "Таблица" для компьютеров в комнате -->
         <section class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 shadow-md">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Список компьютеров в комнате <span onclick="openModal()" class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500 cursor-pointer">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Список компьютеров в комнате <span onclick="openModal('add-computer-modal')" class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500 cursor-pointer">
                 🖥️ Добавить ПК
             </span></h2>
             <div class="overflow-x-auto">
@@ -93,6 +95,8 @@
                                 <button onclick="controlPC('{{.ID}}', 'reboot')" class="py-1 px-3 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Перезагрузить</button>
                                 <button onclick="controlPC('{{.ID}}', 'block')" class="py-1 px-3 text-sm rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 focus:outline-none">Заблокировать</button>
                                 <button onclick="controlPC('{{.ID}}', 'unblock')" class="py-1 px-3 text-sm rounded-lg bg-green-600 text-white hover:bg-green-700 focus:outline-none">Разблокировать</button>
+                                                                <button onclick="controlPC('{{.ID}}', 'unblock')" class="py-1 px-3 text-sm rounded-lg bg-green-600 text-white hover:bg-green-700 focus:outline-none">Разблокировать</button>
+
 
                                 <a href="#" class="py-1 px-3 text-sm rounded-lg bg-gray-600 text-white hover:bg-gray-700 focus:outline-none">Открыть</a>
                             </td>

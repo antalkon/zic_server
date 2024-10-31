@@ -24,3 +24,19 @@ func PcOff(c *gin.Context) {
 func PcReboot(c *gin.Context) {
 	spc.RebootPc(c)
 }
+
+func PcBlock(c *gin.Context) {
+	spc.PcBlock(c)
+}
+
+func PcUnBlock(c *gin.Context) {
+	spc.PcUnBlock(c)
+}
+
+func StartPc(c *gin.Context) {
+	spc.StartPc(c)
+}
+
+func ScreenPc(c *gin.Context) {
+	spc.Screen(c)
+}

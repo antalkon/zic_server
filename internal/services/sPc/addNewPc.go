@@ -28,6 +28,7 @@ func AddPc(c *gin.Context) {
 	if err != nil {
 		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to generate random ID"})
+		fmt.Println(err)
 		return
 	}
 	pc.ID = uint64(id)
@@ -36,6 +37,8 @@ func AddPc(c *gin.Context) {
 	if err := pcpg.AddNewPc(&pc); err != nil {
 		logger.LogError(err)
 		c.JSON(500, gin.H{"error": err.Error()})
+		fmt.Println(err)
+
 		return
 	}
 
@@ -44,6 +47,8 @@ func AddPc(c *gin.Context) {
 	if err != nil {
 		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to get IPs"})
+		fmt.Println(err)
+
 		return
 	}
 
@@ -57,6 +62,8 @@ func AddPc(c *gin.Context) {
 	if err != nil {
 		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to encode JSON"})
+		fmt.Println(err)
+
 		return
 	}
 
@@ -66,6 +73,8 @@ func AddPc(c *gin.Context) {
 	if err != nil {
 		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to create request"})
+		fmt.Println(err)
+
 		return
 	}
 	req.Header.Set("Content-Type", "application/json")
@@ -75,12 +84,16 @@ func AddPc(c *gin.Context) {
 	if err != nil {
 		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to send request"})
+		fmt.Println(err)
+
 		return
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		c.JSON(500, gin.H{"error": "Failed to invite PC"})
+		fmt.Println(err)
+
 		return
 	}
 

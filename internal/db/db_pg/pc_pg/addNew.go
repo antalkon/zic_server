@@ -17,10 +17,6 @@ func AddNewPc(pc *models.Computer) error {
 	}
 
 	// Проверка на существование записи (если требуется)
-	var existingPC models.Computer
-	if err := db.Where("l_ip = ? OR p_ip = ?", pc.LIP, pc.PIP).First(&existingPC).Error; err == nil {
-		return errors.New("computer with the same local or public IP already exists")
-	}
 
 	// Создание новой записи
 	if err := db.Create(pc).Error; err != nil {
