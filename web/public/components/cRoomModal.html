@@ -1,0 +1,74 @@
+<div id="add-computer-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Добавить компьютер</h3>
+        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
+      </div>
+      <form id="add-computer-form" class="space-y-4">
+        <div>
+          <label for="computer-name" class="block text-sm font-medium text-gray-700">Введите имя компьютера</label>
+          <input type="text" id="computer-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        </div>
+        <div>
+          <label for="local-ip" class="block text-sm font-medium text-gray-700">Укажите локальный IP адрес компьютера</label>
+          <input type="text" id="local-ip" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        </div>
+        <div>
+          <label for="public-ip" class="block text-sm font-medium text-gray-700">Укажите публичный IP адрес в сети компьютера</label>
+          <input type="text" id="public-ip" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        </div>
+      </form>
+      <div class="mt-4 flex justify-end space-x-2">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-200 rounded-md">Закрыть</button>
+        <button onclick="submitComputerForm({{.id}})" class="px-4 py-2 bg-blue-600 text-white rounded-md">Добавить</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Открытие модального окна
+    function openModal() {
+      document.getElementById('add-computer-modal').classList.remove('hidden');
+    }
+  
+    // Закрытие модального окна
+    function closeModal() {
+      document.getElementById('add-computer-modal').classList.add('hidden');
+    }
+  
+    function submitComputerForm(id) {
+      const name = document.getElementById("computer-name").value;
+      const lip = document.getElementById("local-ip").value;
+      const pip = document.getElementById("public-ip").value;
+  
+      const data = {
+        "room": parseInt(id),
+        "name": name,
+        "lip": lip,
+        "pip": pip
+      };
+      console.log(data); // Проверка полученных данных для отладки
+  
+      fetch("/pc/api/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("Компьютер добавлен успешно");
+          document.getElementById("add-computer-form").reset(); // Сброс формы
+          closeModal(); // Закрываем модальное окно
+        } else {
+          alert("Ошибка при добавлении компьютера");
+        }
+      })
+      .catch(error => {
+        console.error("Ошибка:", error);
+        alert("Ошибка при добавлении компьютера");
+      });
+      console.log(error)
+    }
+  </script>

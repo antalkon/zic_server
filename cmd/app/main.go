@@ -65,6 +65,7 @@ func main() {
 		go tools.LoadCPU()
 		go tools.LoadRAM()
 		go tools.LoadNetwork()
+		go tools.CheckStatus()
 	} else {
 		fmt.Println("Активация базы данных отключена в конфигурации")
 	}
