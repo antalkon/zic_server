@@ -1,0 +1,21 @@
+<!-- Экран блокировки с затемнением и спиннером -->
+<div id="lockScreen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center backdrop-blur-sm hidden">
+    <div class="animate-spin inline-block w-10 h-10 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Тост уведомление для показа статуса -->
+  <div id="toast" class="fixed bottom-4 right-4 max-w-xs bg-blue-100 border border-blue-200 text-sm text-blue-800 rounded-lg dark:bg-blue-800/10 dark:border-blue-900 dark:text-blue-500 hidden" role="alert">
+    <div class="flex p-4">
+      <span id="toastMessage">Hello, world! This is a toast message.</span>
+      <button onclick="hideToast()" type="button" class="ms-auto inline-flex justify-center items-center size-5 rounded-lg text-blue-800 opacity-50 hover:opacity-100 focus:outline-none dark:text-blue-200" aria-label="Close">
+        <span class="sr-only">Close</span>
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"></path>
+          <path d="M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  

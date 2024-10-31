@@ -12,3 +12,15 @@ func AddNewPc(c *gin.Context) {
 func PcCount(c *gin.Context) {
 	spc.PcCount(c)
 }
+
+func ServerPing(c *gin.Context) {
+	spc.PcPing(c)
+}
+
+func PcOff(c *gin.Context) {
+	spc.OffPc(c)
+}
+
+func PcReboot(c *gin.Context) {
+	spc.RebootPc(c)
+}

@@ -5,6 +5,6 @@ sec:
     gbnet: true
     reqauth: true
 tg_bot:
-    newtask: false
+    newtask: true
     sysstat: false
-    token: falsedf
+    token: sdfalsedf

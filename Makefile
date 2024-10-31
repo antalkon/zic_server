@@ -16,4 +16,5 @@ build:
 
 # Локальный запуск приложения
 run:
-    ./main
+    go run cmd/app/main.go
+

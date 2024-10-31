@@ -101,7 +101,7 @@
 
             // Отправляем AJAX-запрос на сервер
             $.ajax({
-                url: 'http://localhost:8385/auth/api/login',
+                url: '/auth/api/login',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ name, password }),

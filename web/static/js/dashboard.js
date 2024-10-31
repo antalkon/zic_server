@@ -1,5 +1,5 @@
 function updatePcOnlineBlock() {
-    sendPostRequest('http://localhost:8385/pc/api/count', {}, function(result) {
+    sendPostRequest('/pc/api/count', {}, function(result) {
         const countElement = document.getElementById('pc-online-count');
         const circleElement = document.getElementById('pc-online-circle');
 
@@ -17,7 +17,7 @@ function updatePcOnlineBlock() {
 }
 
 function updateRoomOnlineBlock() {
-    sendPostRequest('http://localhost:8385/room/api/count', {}, function(result) {
+    sendPostRequest('/room/api/count', {}, function(result) {
         const countElement = document.getElementById('room-online-count');
         const circleElement = document.getElementById('room-online-circle');  // Исправлено 'rooom' на 'room'
 
@@ -35,7 +35,7 @@ function updateRoomOnlineBlock() {
 }
 
 function updateStatOnlineBlock() {
-    sendPostRequest('http://localhost:8385/setting/api/sys/status', {}, function(result) {
+    sendPostRequest('/setting/api/sys/status', {}, function(result) {
         const countElement = document.getElementById('stat-online-count');
         const circleElement = document.getElementById('stat-online-circle');  // Исправлено 'rooom' на 'room'
 

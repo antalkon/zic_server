@@ -2,6 +2,7 @@ package sessions
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -13,15 +14,25 @@ var secretKey = "secret.key"
 
 // InitSessionStore инициализирует хранилище сессий с максимальным временем жизни 12 часов
 func InitSessionStore() gin.HandlerFunc {
-	// Хранилище для сессий с использованием куков
 	store := cookie.NewStore([]byte(secretKey))
-	store.Options(sessions.Options{
-		Path:     "/",          // Устанавливаем путь куки на корневой (вся область сайта)
-		MaxAge:   12 * 60 * 60, // Время жизни сессии 12 часов
-		HttpOnly: true,         // Куки недоступны через JS
-		Secure:   false,        // Устанавливаем true для HTTPS
-	})
-	return sessions.Sessions("session-name", store)
+
+	return func(c *gin.Context) {
+		// Получаем текущий хост (IP или домен) из запроса
+		host := c.Request.Host
+
+		// Настраиваем параметры куки, используя полученный хост как домен
+		store.Options(sessions.Options{
+			Path:     "/",
+			Domain:   host,         // Динамически подставляем текущий домен или IP
+			MaxAge:   12 * 60 * 60, // Время жизни сессии 12 часов
+			HttpOnly: true,
+			Secure:   false, // Установи true для продакшн-сервера на HTTPS
+
+		})
+
+		// Применяем middleware сессий с динамическим доменом
+		sessions.Sessions("session-name", store)(c)
+	}
 }
 
 // SetUserSession сохраняет сессию для пользователя
@@ -50,4 +61,21 @@ func ClearSession(c *gin.Context) error {
 	session := sessions.Default(c)
 	session.Clear() // Очищаем сессию
 	return session.Save()
+}
+
+func SessionAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		user := session.Get("user")
+
+		// Если пользователя нет в сессии, возвращаем 403
+		if user == nil {
+			c.Redirect(http.StatusFound, "/403")
+			c.Abort() // Прекращаем дальнейшую обработку
+			return
+		}
+
+		// Продолжаем обработку, если пользователь найден
+		c.Next()
+	}
 }

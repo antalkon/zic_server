@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/antalkon/zic_server/internal/handler"
 	"github.com/antalkon/zic_server/pkg/config"
@@ -18,6 +19,8 @@ func SetupRoutes(r *gin.Engine) {
 		return
 	}
 
+	m := sessions.SessionAuthMiddleware()
+
 	// Включаем стандартное логирование запросов и обработку ошибок
 	r.Use(gin.Logger())   // Логирование всех запросов
 	r.Use(gin.Recovery()) // Восстановление после паники и логирование ошибок
@@ -26,19 +29,26 @@ func SetupRoutes(r *gin.Engine) {
 	r.Static("/static", "./web/static")
 	r.LoadHTMLGlob("web/public/**/*")
 
+	r.NoRoute(func(c *gin.Context) {
+		c.Redirect(http.StatusFound, "/404")
+	})
+
 	main := r.Group("/")
 	{
 		if viper.GetBool("activate") {
 			main.GET("/", handler.LoginPage)
-			main.GET("/dashboard", handler.Dashboard)
-			main.GET("/dashboard/settings", handler.SettingsPage)
-			main.GET("/dashboard/data", handler.DataPage)
-			main.GET("/dashboard/data/room/:id", handler.RoomDataPage)
+			main.GET("/dashboard", m, handler.Dashboard)
+			main.GET("/dashboard/settings", m, handler.SettingsPage)
+			main.GET("/dashboard/data", m, handler.DataPage)
+			main.GET("/dashboard/data/room/:id", m, handler.RoomDataPage)
 
-			main.GET("/dashboard/load/cpu", handler.LoadCPUPage)
-			main.GET("/dashboard/load/ram", handler.LoadRAMPage)
-			main.GET("/dashboard/load/network", handler.LoadNetworkPage)
-			main.GET("/dashboard/load/storage", handler.LoadStoragePage)
+			main.GET("/dashboard/load/cpu", m, handler.LoadCPUPage)
+			main.GET("/dashboard/load/ram", m, handler.LoadRAMPage)
+			main.GET("/dashboard/load/network", m, handler.LoadNetworkPage)
+			main.GET("/dashboard/load/storage", m, handler.LoadStoragePage)
+
+			main.GET("/403", handler.NotAuth)
+			main.GET("/404", handler.NotFound)
 
 		} else {
 			main.GET("/", handler.ActivatePage)
@@ -46,24 +56,17 @@ func SetupRoutes(r *gin.Engine) {
 
 	}
 
-	// Группа маршрутов для пользователей
-	userGroup := r.Group("/users")
-	{
-		userGroup.GET("/", handler.GetUsers)
-		userGroup.POST("/", handler.CreateUser)
-	}
-
 	// Группа маршрутов для настроек
 	settingsApi := r.Group("/setting/api")
 	{
-		settingsApi.POST("/activate", handler.Activate)
-		settingsApi.POST("/sys/status", handler.SysStaus)
-		settingsApi.POST("/tg", handler.TgData)
-		settingsApi.PUT("/tg", handler.TgNewData)
-		settingsApi.POST("/sec/network", handler.SecNetwork)
-		settingsApi.POST("/sec/firewall", handler.SecFirewall)
-		settingsApi.POST("/sec/auth", handler.SecAuth)
-		settingsApi.POST("/sec/settings", handler.SecGet)
+		settingsApi.POST("/activate", m, handler.Activate)
+		settingsApi.POST("/sys/status", m, handler.SysStaus)
+		settingsApi.POST("/tg", m, handler.TgData)
+		settingsApi.PUT("/tg", m, handler.TgNewData)
+		settingsApi.POST("/sec/network", m, handler.SecNetwork)
+		settingsApi.POST("/sec/firewall", m, handler.SecFirewall)
+		settingsApi.POST("/sec/auth", m, handler.SecAuth)
+		settingsApi.POST("/sec/settings", m, handler.SecGet)
 
 		settingsApi.GET("/info", handler.InfoVesion)
 
@@ -71,29 +74,34 @@ func SetupRoutes(r *gin.Engine) {
 
 	tools := r.Group("/tools/api")
 	{
-		tools.POST("/restart", handler.Restart)
-		tools.POST("/load/cpu", handler.LoadCPU)
-		tools.POST("/load/ram", handler.LoadRAM)
-		tools.POST("/load/network", handler.LoadNetwork)
-		tools.POST("/load/storage", handler.LoadStorage)
+		tools.POST("/restart", m, handler.Restart)
+		tools.POST("/load/cpu", m, handler.LoadCPU)
+		tools.POST("/load/ram", m, handler.LoadRAM)
+		tools.POST("/load/network", m, handler.LoadNetwork)
+		tools.POST("/load/storage", m, handler.LoadStorage)
 
 	}
 	// Группа маршрутов для компьютеров
 	pcApi := r.Group("/pc/api")
 	{
-		pcApi.POST("/new", handler.AddNewPc)
-		pcApi.POST("/count", handler.PcCount)
+		pcApi.POST("/new", m, handler.AddNewPc)
+		pcApi.POST("/count", m, handler.PcCount)
+		pcApi.GET("/ping/server", handler.ServerPing)
+		pcApi.POST("/off/:id", m, handler.PcOff)
+		pcApi.POST("/reboot/:id", m, handler.PcReboot)
 
 		// pcApi.POST("/coment/:id")
 	}
 
 	roomApi := r.Group("/room/api")
 	{
-		roomApi.POST("/new", handler.AddNewRoom)
-		roomApi.POST("/count", handler.RoomCount)
-		roomApi.POST("/room", handler.RoomsData)
-		roomApi.POST("/room/block/:id", handler.BlockRoom)
-		roomApi.POST("/room/unblock/:id", handler.UnblockRoom)
+		roomApi.POST("/new", m, handler.AddNewRoom)
+		roomApi.POST("/count", m, handler.RoomCount)
+		roomApi.POST("/room", m, handler.RoomsData)
+		roomApi.POST("/room/block/:id", m, handler.BlockRoom)
+		roomApi.POST("/room/unblock/:id", m, handler.UnblockRoom)
+		roomApi.POST("/room/off/:id", m, handler.OffRoom)
+		roomApi.POST("/room/reboot/:id", m, handler.RebootRoom)
 
 	}
 

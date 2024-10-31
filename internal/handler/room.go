@@ -28,3 +28,11 @@ func BlockRoom(c *gin.Context) {
 func UnblockRoom(c *gin.Context) {
 	sroom.RoomUnBlock(c)
 }
+
+func OffRoom(c *gin.Context) {
+	sroom.RoomOff(c)
+}
+
+func RebootRoom(c *gin.Context) {
+	sroom.Reboot(c)
+}

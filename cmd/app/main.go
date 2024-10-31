@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"net/http"
 
 	"github.com/antalkon/zic_server/internal/router"
 	"github.com/antalkon/zic_server/pkg/config"
@@ -25,7 +26,7 @@ func main() {
 	}
 
 	// Выводим адрес сервера из конфигурации для отладки
-	address := viper.GetString("http_server.address") // исправил "adress" на "address"
+	address := viper.GetString("http_server.address")
 	if address == "" {
 		logger.LogError(errors.New("Проблема с адресом серера"))
 		fmt.Println("Адрес сервера не задан в конфигурациыи. Проверьте настройки.")
@@ -33,8 +34,25 @@ func main() {
 	}
 	fmt.Printf("Запуск сервера на %s\n", address)
 
-	// Настраиваем маршруты с использованием gin
+	// Настраиваем Gin с CORS middleware
 	r := gin.Default()
+
+	// Добавляем CORS middleware
+	r.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Обрабатываем OPTIONS-запросы (CORS preflight)
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+
+		c.Next()
+	})
+
+	// Настраиваем маршруты
 	router.SetupRoutes(r)
 
 	// Проверяем, нужно ли активировать базу данных
