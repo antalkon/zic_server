@@ -28,6 +28,12 @@ func RoomBlock(c *gin.Context) {
 		return
 	}
 
+	err = roompg.RoomOn(id, false)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
 	var wg sync.WaitGroup
 	successCount, badCount := 0, 0
 	mu := sync.Mutex{} // Мьютекс для безопасного обновления счетчиков
@@ -89,6 +95,11 @@ func RoomUnBlock(c *gin.Context) {
 		return
 	}
 
+	err = roompg.RoomOn(id, true)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
 	var wg sync.WaitGroup
 	successCount, badCount := 0, 0
 	mu := sync.Mutex{} // Мьютекс для безопасного обновления счетчиков

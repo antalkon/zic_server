@@ -22,3 +22,19 @@ func GetPcData(lip string) (models.Computer, error) {
 	}
 	return pc, nil
 }
+
+func GetPcDataId(id string) (models.Computer, error) {
+	db := pggorm.DB
+	if db == nil {
+		return models.Computer{}, errors.New("DB connection is nil")
+	}
+
+	var pc models.Computer
+
+	if err := db.Model(&models.Computer{}).
+		Where("id = ?", id).
+		First(&pc).Error; err != nil {
+		return pc, err
+	}
+	return pc, nil
+}

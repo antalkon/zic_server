@@ -11,12 +11,14 @@
 <body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
     {{template "toasts.html" .}}
     {{template "header.html" .}}
-    {{template "cDashModals.html" .}}
+    {{template "cDataModal.html" .}}
 
     <main class="flex-grow px-4 py-4 mt-3 w-full max-w-[96%] mx-auto">
         <!-- Адаптивный блок для карточек "Кабинеты" -->
         <section class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 shadow-md">
-            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Кабинеты</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Кабинеты <span onclick="openModal('add-computer-modal')" class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500 cursor-pointer">
+                ➕ Добавить Кабинет
+            </span></h2>
             <div id="rooms-container" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 <!-- Здесь будут динамически добавляться карточки комнат -->
             </div>

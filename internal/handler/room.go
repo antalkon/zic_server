@@ -40,3 +40,7 @@ func RebootRoom(c *gin.Context) {
 func LinkRoom(c *gin.Context) {
 	sroom.Link(c)
 }
+
+func LSRoom(c *gin.Context) {
+	sroom.Ls(c)
+}

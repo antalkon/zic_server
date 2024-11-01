@@ -41,6 +41,7 @@ func SetupRoutes(r *gin.Engine) {
 			main.GET("/dashboard/settings", m, handler.SettingsPage)
 			main.GET("/dashboard/data", m, handler.DataPage)
 			main.GET("/dashboard/data/room/:id", m, handler.RoomDataPage)
+			main.GET("/dashboard/data/pc/:id", m, handler.PcDataPage)
 
 			main.GET("/dashboard/load/cpu", m, handler.LoadCPUPage)
 			main.GET("/dashboard/load/ram", m, handler.LoadRAMPage)
@@ -85,6 +86,9 @@ func SetupRoutes(r *gin.Engine) {
 	pcApi := r.Group("/pc/api")
 	{
 		pcApi.POST("/new", m, handler.AddNewPc)
+		pcApi.POST("/edit", m, handler.EditPc)
+		pcApi.POST("/del/:id", m, handler.DelPC)
+
 		pcApi.POST("/count", m, handler.PcCount)
 		pcApi.GET("/ping/server", handler.ServerPing)
 		pcApi.POST("/off/:id", m, handler.PcOff)
@@ -93,6 +97,9 @@ func SetupRoutes(r *gin.Engine) {
 		pcApi.POST("/unblock/:id", m, handler.PcUnBlock)
 		pcApi.GET("/start/:lip", handler.StartPc)
 		pcApi.GET("/screen/:lip", handler.ScreenPc)
+		pcApi.POST("/link/:lip", handler.LinkPc)
+
+		pcApi.POST("/ls/:lip", handler.LSPc)
 
 		// pcApi.POST("/coment/:id")
 	}
@@ -107,6 +114,8 @@ func SetupRoutes(r *gin.Engine) {
 		roomApi.POST("/room/off/:id", m, handler.OffRoom)
 		roomApi.POST("/room/reboot/:id", m, handler.RebootRoom)
 		roomApi.POST("/room/link/:id", m, handler.LinkRoom)
+
+		roomApi.POST("/room/ls/:id", m, handler.LSRoom)
 
 	}
 

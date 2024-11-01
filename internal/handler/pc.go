@@ -40,3 +40,23 @@ func StartPc(c *gin.Context) {
 func ScreenPc(c *gin.Context) {
 	spc.Screen(c)
 }
+
+func PcDataPage(c *gin.Context) {
+	spc.PcPage(c)
+}
+
+func LinkPc(c *gin.Context) {
+	spc.PcLink(c)
+}
+
+func LSPc(c *gin.Context) {
+	spc.PcLS(c)
+}
+
+func EditPc(c *gin.Context) {
+	spc.Edit(c)
+}
+
+func DelPC(c *gin.Context) {
+	spc.Del(c)
+}
