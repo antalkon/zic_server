@@ -3,7 +3,6 @@ package sroom
 import (
 	roompg "github.com/antalkon/zic_server/internal/db/db_pg/room_pg"
 	"github.com/antalkon/zic_server/internal/models"
-	"github.com/antalkon/zic_server/pkg/logger"
 	"github.com/antalkon/zic_server/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +15,6 @@ func NewRoom(c *gin.Context) {
 	}
 	id, err := utils.GenerateRandomNumber(12)
 	if err != nil {
-		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to generate random ID"})
 	}
 	room.ID = uint64(id)

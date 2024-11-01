@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.title}}</title>
-    {{template "cBInport.html" .}}
+
+    <!-- Подключение основного CSS -->
     <link rel="stylesheet" href="/static/css/dashboard.css">
+    {{template "cBInport.html" .}}
 </head>
 
 <body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
     {{template "toasts.html" .}}
     {{template "header.html" .}}
-    {{template "cDashModals.html" .}}
 
     <main class="flex-grow px-4 py-4 mt-3 w-full max-w-[96%] mx-auto">
         {{ if not .setting }}
             {{template "cSettingBanner.html" .}}
         {{ end }}
-    
+
+        <!-- Основная статистика -->
         <div class="w-full bg-white dark:bg-neutral-800 rounded-lg py-6 px-6 shadow-xl mb-6 relative">
             <div id="overlay" class="hidden absolute inset-0 w-full h-full bg-white/95 dark:bg-neutral-900/95 rounded-lg transition-colors duration-300 z-50 flex justify-center items-center">
                 <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
                     <span class="sr-only">Loading...</span>
-                  </div>
+                </div>
             </div>
-                <!-- Кнопка обновления -->
+
+            <!-- Кнопка обновления -->
             <button onclick="refresh()" class="absolute top-4 right-4 w-10 h-10 rounded-lg bg-gray-200 dark:bg-neutral-600 hover:bg-gray-300 dark:hover:bg-neutral-500 flex justify-center items-center transition-colors duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                  </svg>
+                </svg>
             </button>
-            <h2 class="text-2xl font-bold mb-4">Основная статистика <span id="open-modal-btn" class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500 cursor-pointer">
-                Нажмите чтобы открыть мониторинг
-            </span>
+
+            <h2 class="text-2xl font-bold mb-4">Основная статистика 
+                <span id="open-modal-btn" class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500 cursor-pointer">
+                    Нажмите чтобы открыть мониторинг
+                </span>
             </h2>
-            <p class="text-md mb-6">
-                Основная статистика работы системы Zentas Infromatic Class. Для получения подробной информации нажмите на нужный компонент.
-            </p>
+            <p class="text-md mb-6">Основная статистика работы системы Zentas Infromatic Class. Для получения подробной информации нажмите на нужный компонент.</p>
+
             <!-- Пять микроблоков -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                 <div id="pc-online-block" class="bg-gray-100 dark:bg-neutral-700 p-4 rounded-lg shadow relative h-40 flex flex-col justify-between">
@@ -48,6 +53,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Остальные блоки статистики без изменений -->
                 <div class="bg-gray-100 dark:bg-neutral-700 p-4 rounded-lg shadow relative h-40 flex flex-col justify-between">
                     <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400">Активных кабинетов</h3>
                     <div class="flex justify-between items-end">
@@ -84,72 +90,55 @@
                         </div>
                     </div>
                 </div>
-        
             </div>
         </div>
+
+        <!-- Действия с системой -->
         <div class="w-full bg-white dark:bg-neutral-800 rounded-lg py-6 px-6 shadow-xl mb-6">
             <h2 class="text-2xl font-bold mb-4">Действия с системой</h2>
             <p class="text-md mb-6">
                 Выберите действие для управления системой Zentas Infromatic Class. Для выполнения действия нажмите на нужную карточку.
-            </p>        
+            </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <div class="absolute top-2 right-2">
-                        <img src="your-icon-url1.png" alt="Заблокировать компьютеры" class="w-12 h-12">
-                    </div>
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
-                        Блокировка
-                    </p>
+                <div onclick="openModal('block')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Заблокировать</p>
+                </div>
+                <div onclick="openModal('unblock')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Разблокировать</p>
                 </div>            
-                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <div class="absolute top-2 right-2">
-                        <img src="your-icon-url2.png" alt="Отключить сеть" class="w-12 h-12">
-                    </div>
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
-                        Send Link
-                    </p>
+                <div onclick="openModal('link')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Открыть ссылку</p>
                 </div>            
-                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <div class="absolute top-2 right-2">
-                        <img src="your-icon-url3.png" alt="Перезагрузить все устройства" class="w-12 h-12">
-                    </div>
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
-                        Выключение компьюетров
-                    </p>
+                <div onclick="openModal('off')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Выключить ПК</p>
                 </div>            
-                <div class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <div class="absolute top-2 right-2">
-                        <img src="your-icon-url4.png" alt="Очистить кэш всех устройств" class="w-12 h-12">
-                    </div>
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">
-                        Перезагрузка комптютеров
-                    </p>
+                <div onclick="openModal('reboot')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
+                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Перезагрузить ПК</p>
                 </div>
             </div>
          </div>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer и модальные окна -->
     {{template "cFooter.html" .}}
+    {{template "cDashFastModal.html" .}}
+    {{template "cDashModals.html" .}}
 
+    <!-- Подключение скриптов в конце для ускорения рендеринга -->
+    <script src="static/js/dashboard.js" defer></script>
+    <script>
+        document.getElementById('open-modal-btn').addEventListener('click', function() {
+            document.getElementById('hs-static-backdrop-modal').classList.remove('hidden');
+        });
 
+        document.getElementById('close-modal-btn').addEventListener('click', function() {
+            document.getElementById('hs-static-backdrop-modal').classList.add('hidden');
+        });
 
-<script src="static/js/dashboard.js"></script>
- <script>
-  // Открытие модального окна
-  document.getElementById('open-modal-btn').addEventListener('click', function() {
-    document.getElementById('hs-static-backdrop-modal').classList.remove('hidden');
-  });
-
-  // Закрытие модального окна при клике на кнопку закрытия
-  document.getElementById('close-modal-btn').addEventListener('click', function() {
-    document.getElementById('hs-static-backdrop-modal').classList.add('hidden');
-  });
-
-  // Закрытие модального окна при клике на кнопку закрытия в нижней части
-  document.getElementById('close-modal-btn-footer').addEventListener('click', function() {
-    document.getElementById('hs-static-backdrop-modal').classList.add('hidden');
-  });
-</script>
+        document.getElementById('close-modal-btn-footer').addEventListener('click', function() {
+            document.getElementById('hs-static-backdrop-modal').classList.add('hidden');
+        });
+    </script>
 </body>
+
 </html>

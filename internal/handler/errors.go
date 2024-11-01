@@ -5,10 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Страница ошибки отказано в доступе
 func NotAuth(c *gin.Context) {
 	serrors.Page403(c)
 }
 
+// Страница ошибки не найдено
 func NotFound(c *gin.Context) {
 	serrors.Page404(c)
 }

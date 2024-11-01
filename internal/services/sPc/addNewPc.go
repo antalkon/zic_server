@@ -9,7 +9,6 @@ import (
 	pcpg "github.com/antalkon/zic_server/internal/db/db_pg/pc_pg"
 	"github.com/antalkon/zic_server/internal/models"
 	getip "github.com/antalkon/zic_server/pkg/getIP"
-	"github.com/antalkon/zic_server/pkg/logger"
 	"github.com/antalkon/zic_server/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +25,6 @@ func AddPc(c *gin.Context) {
 	// Генерация случайного ID
 	id, err := utils.GenerateRandomNumber(12)
 	if err != nil {
-		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to generate random ID"})
 		fmt.Println(err)
 		return
@@ -35,7 +33,6 @@ func AddPc(c *gin.Context) {
 
 	// Добавление ПК в базу данных
 	if err := pcpg.AddNewPc(&pc); err != nil {
-		logger.LogError(err)
 		c.JSON(500, gin.H{"error": err.Error()})
 		fmt.Println(err)
 
@@ -45,7 +42,6 @@ func AddPc(c *gin.Context) {
 	// Получаем локальный и публичный IP
 	pip, lip, err := getip.GetIps()
 	if err != nil {
-		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to get IPs"})
 		fmt.Println(err)
 
@@ -60,7 +56,6 @@ func AddPc(c *gin.Context) {
 	}
 	jsonData, err := json.Marshal(inviteData)
 	if err != nil {
-		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to encode JSON"})
 		fmt.Println(err)
 
@@ -71,7 +66,6 @@ func AddPc(c *gin.Context) {
 	url := fmt.Sprintf("http://%s:3000/server/invite", pc.LIP)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
-		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to create request"})
 		fmt.Println(err)
 
@@ -82,7 +76,6 @@ func AddPc(c *gin.Context) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		logger.LogError(err)
 		c.JSON(500, gin.H{"error": "Failed to send request"})
 		fmt.Println(err)
 

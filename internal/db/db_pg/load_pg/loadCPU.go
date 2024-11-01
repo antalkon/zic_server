@@ -9,12 +9,12 @@ import (
 	pggorm "github.com/antalkon/zic_server/pkg/db/pg_gorm"
 )
 
+// Создание запись нагрузки CPU
 func NewCPURecord(usage []float64) error {
 	db := pggorm.DB
 	if db == nil {
 		return errors.New("Error creating database connection")
 	}
-
 	cpuLoad := models.CPULoad{
 		Timestamp: time.Now(),
 		Usage:     usage[0],

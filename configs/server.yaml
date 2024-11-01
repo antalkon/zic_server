@@ -4,6 +4,7 @@ http_server:
     address: 0.0.0.0:8385
     idle_timeout: 60s
     timeout: 4s
+    mode: "prod"
 password: alex
 port: "5444"
 user: alex

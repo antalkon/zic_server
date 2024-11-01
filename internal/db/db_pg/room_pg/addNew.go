@@ -7,12 +7,12 @@ import (
 	pggorm "github.com/antalkon/zic_server/pkg/db/pg_gorm"
 )
 
+// Добавляем в таблицу новую комнату
 func NewRoom(r *models.Room) error {
 	db := pggorm.DB
 	if db == nil {
 		return errors.New("Error creating database NewRoom")
 	}
-
 	if err := db.Create(r).Error; err != nil {
 		return err
 	}

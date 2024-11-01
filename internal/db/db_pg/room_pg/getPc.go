@@ -13,12 +13,10 @@ func GetCountPCOn(room string) (int64, error) {
 	if db == nil {
 		return 0, errors.New("DB connection is nil")
 	}
-
 	var count int64
 	if err := db.Model(&models.Computer{}).Where("room_id = ? AND \"on\" = ?", room, true).Count(&count).Error; err != nil {
 		return 0, err
 	}
-
 	return count, nil
 }
 
@@ -28,12 +26,10 @@ func GetCountPCOff(room string) (int64, error) {
 	if db == nil {
 		return 0, errors.New("DB connection is nil")
 	}
-
 	var count int64
 	if err := db.Model(&models.Computer{}).Where("room_id = ? AND \"on\" = ?", room, false).Count(&count).Error; err != nil {
 		return 0, err
 	}
-
 	return count, nil
 }
 
@@ -43,12 +39,10 @@ func GetTotalPCCount(room string) (int64, error) {
 	if db == nil {
 		return 0, errors.New("DB connection is nil")
 	}
-
 	var count int64
 	if err := db.Model(&models.Computer{}).Where("room_id = ?", room).Count(&count).Error; err != nil {
 		return 0, err
 	}
-
 	return count, nil
 }
 
@@ -58,12 +52,10 @@ func GetCountPCBlocked(room string) (int64, error) {
 	if db == nil {
 		return 0, errors.New("DB connection is nil")
 	}
-
 	var count int64
 	if err := db.Model(&models.Computer{}).Where("room_id = ? AND status = ?", room, "blocked").Count(&count).Error; err != nil {
 		return 0, err
 	}
-
 	return count, nil
 }
 
@@ -73,12 +65,10 @@ func GetCountPCWorking(room string) (int64, error) {
 	if db == nil {
 		return 0, errors.New("DB connection is nil")
 	}
-
 	var count int64
 	if err := db.Model(&models.Computer{}).Where("room_id = ? AND status = ?", room, "work").Count(&count).Error; err != nil {
 		return 0, err
 	}
-
 	return count, nil
 }
 
@@ -88,11 +78,9 @@ func GetAllPCsInRoom(room string) ([]models.Computer, error) {
 	if db == nil {
 		return nil, errors.New("DB connection is nil")
 	}
-
 	var computers []models.Computer
 	if err := db.Where("room_id = ?", room).Find(&computers).Error; err != nil {
 		return nil, err
 	}
-
 	return computers, nil
 }

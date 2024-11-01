@@ -8,51 +8,71 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var log *logrus.Logger
+// Logger – интерфейс для логирования, позволяющий легко заменить логгер в тестах или разных средах
+type Logger interface {
+	Info(args ...interface{})
+	Warn(args ...interface{})
+	Error(args ...interface{})
+	Fatal(args ...interface{})
+}
 
-// InitLogger инициализирует логгер с ротацией логов
-func InitLogger() {
-	log = logrus.New()
-	// Создает директорию logs, если она не существует
-	if err := os.MkdirAll("logs", os.ModePerm); err != nil {
-		log.Fatalf("Failed to create logs directory: %v", err) // Fatal: завершает программу
+// CustomLogger включает Logrus и поддержку ротации логов через Lumberjack
+type CustomLogger struct {
+	log *logrus.Logger
+}
+
+// Config структура для параметров конфигурации логгера
+type Config struct {
+	Filename   string
+	MaxSize    int
+	MaxBackups int
+	MaxAge     int
+	Compress   bool
+	Level      logrus.Level
+}
+
+// InitLogger инициализирует логгер с ротацией логов и возвращает его
+func InitLogger(config Config) (*CustomLogger, error) {
+	logger := logrus.New()
+
+	// Создаем директорию для логов, если она не существует
+	logDir := filepath.Dir(config.Filename)
+	if err := os.MkdirAll(logDir, os.ModePerm); err != nil {
+		return nil, err
 	}
 
 	// Настройка ротации логов
-	log.SetOutput(&lumberjack.Logger{
-		Filename:   filepath.Join("logs", "server.log"),
-		MaxSize:    10,   // Размер в MB до ротации
-		MaxBackups: 5,    // Максимальное количество файлов бэкапа
-		MaxAge:     30,   // Количество дней хранения логов
-		Compress:   true, // Сжимать ли старые логи
+	logger.SetOutput(&lumberjack.Logger{
+		Filename:   config.Filename,
+		MaxSize:    config.MaxSize,
+		MaxBackups: config.MaxBackups,
+		MaxAge:     config.MaxAge,
+		Compress:   config.Compress,
 	})
 
-	// Устанавливаем формат логов
-	log.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp: true, // Полный формат времени (с датой)
-	})
+	// Устанавливаем формат и уровень логирования
+	logger.SetFormatter(&logrus.TextFormatter{FullTimestamp: true})
+	logger.SetLevel(config.Level)
 
-	// Устанавливаем уровень логирования (можно изменять по необходимости)
-	log.SetLevel(logrus.InfoLevel)
+	return &CustomLogger{log: logger}, nil
 }
 
-// LogError записывает сообщение об ошибке в лог
-func LogError(err error) {
-	log.Errorf("Ошибка: %v", err)
+// Метод Info для логгирования информационных сообщений
+func (c *CustomLogger) Info(args ...interface{}) {
+	c.log.Info(args...)
 }
 
-// LogInfo записывает информационное сообщение в лог
-func LogInfo(message string) {
-	log.Info(message)
+// Метод Warn для логгирования предупреждений
+func (c *CustomLogger) Warn(args ...interface{}) {
+	c.log.Warn(args...)
 }
 
-// LogWarning записывает предупреждение в лог
-func LogWarning(message string) {
-	log.Warn(message)
+// Метод Error для логгирования ошибок
+func (c *CustomLogger) Error(args ...interface{}) {
+	c.log.Error(args...)
 }
 
-// LogFatal записывает критическую ошибку и завершает выполнение программы
-// LogFatal записывает критическую ошибку и завершает выполнение программы
-func LogFatal(message string, err error) {
-	log.Fatalf("%s: %v", message, err) // Изменяем формат вызова, чтобы обрабатывать строку и ошибку
+// Метод Fatal для логгирования критических ошибок и завершения программы
+func (c *CustomLogger) Fatal(args ...interface{}) {
+	c.log.Fatal(args...)
 }

@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/antalkon/zic_server/internal/handler"
 	"github.com/antalkon/zic_server/pkg/config"
@@ -12,29 +13,56 @@ import (
 	"github.com/spf13/viper"
 )
 
-func SetupRoutes(r *gin.Engine) {
+// RequestLogger middleware для логирования всех запросов
+func RequestLogger(log logger.Logger) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Записываем время начала запроса
+		startTime := time.Now()
+
+		// Выполняем следующий middleware в цепочке
+		c.Next()
+
+		// Логируем информацию о запросе после выполнения
+		latency := time.Since(startTime)
+		statusCode := c.Writer.Status()
+		method := c.Request.Method
+		path := c.Request.URL.Path
+
+		log.Info(fmt.Sprintf("[%d] %s %s | %v", statusCode, method, path, latency))
+	}
+}
+
+// SetupRoutes настраивает маршруты и принимает логгер для логирования
+func SetupRoutes(r *gin.Engine, log logger.Logger) {
 	if err := config.LoadServerConfig(); err != nil {
-		logger.LogError(err)
+		log.Error(fmt.Errorf("Ошибка загрузки конфигурации: %w", err))
 		fmt.Println("Ошибка загрузки конфигурации. Проверьте логи.")
 		return
 	}
 
+	// Мидлварь для аутентификации сессий
 	m := sessions.SessionAuthMiddleware()
 
-	// Включаем стандартное логирование запросов и обработку ошибок
-	r.Use(gin.Logger())   // Логирование всех запросов
-	r.Use(gin.Recovery()) // Восстановление после паники и логирование ошибок
+	// Используем кастомное логирование запросов
+	r.Use(RequestLogger(log))
+
+	// Восстановление после паники и логирование ошибок
+	r.Use(gin.Recovery())
 	r.Use(sessions.InitSessionStore())
 
+	// Настраиваем статические файлы и шаблоны
 	r.Static("/static", "./web/static")
 	r.LoadHTMLGlob("web/public/**/*")
 
+	// Обработчик маршрутов, если маршрут не найден
 	r.NoRoute(func(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/404")
 	})
 
+	// Основная группа
 	main := r.Group("/")
 	{
+		// Маршруты в случае, если сервер активирован
 		if viper.GetBool("activate") {
 			main.GET("/", handler.LoginPage)
 			main.GET("/dashboard", m, handler.Dashboard)
@@ -42,19 +70,15 @@ func SetupRoutes(r *gin.Engine) {
 			main.GET("/dashboard/data", m, handler.DataPage)
 			main.GET("/dashboard/data/room/:id", m, handler.RoomDataPage)
 			main.GET("/dashboard/data/pc/:id", m, handler.PcDataPage)
-
 			main.GET("/dashboard/load/cpu", m, handler.LoadCPUPage)
 			main.GET("/dashboard/load/ram", m, handler.LoadRAMPage)
 			main.GET("/dashboard/load/network", m, handler.LoadNetworkPage)
 			main.GET("/dashboard/load/storage", m, handler.LoadStoragePage)
-
 			main.GET("/403", handler.NotAuth)
 			main.GET("/404", handler.NotFound)
-
 		} else {
 			main.GET("/", handler.ActivatePage)
 		}
-
 	}
 
 	// Группа маршрутов для настроек
@@ -68,11 +92,10 @@ func SetupRoutes(r *gin.Engine) {
 		settingsApi.POST("/sec/firewall", m, handler.SecFirewall)
 		settingsApi.POST("/sec/auth", m, handler.SecAuth)
 		settingsApi.POST("/sec/settings", m, handler.SecGet)
-
 		settingsApi.GET("/info", handler.InfoVesion)
-
 	}
 
+	// Группа для работы с инструментами
 	tools := r.Group("/tools/api")
 	{
 		tools.POST("/restart", m, handler.Restart)
@@ -80,15 +103,14 @@ func SetupRoutes(r *gin.Engine) {
 		tools.POST("/load/ram", m, handler.LoadRAM)
 		tools.POST("/load/network", m, handler.LoadNetwork)
 		tools.POST("/load/storage", m, handler.LoadStorage)
-
 	}
+
 	// Группа маршрутов для компьютеров
 	pcApi := r.Group("/pc/api")
 	{
 		pcApi.POST("/new", m, handler.AddNewPc)
 		pcApi.POST("/edit", m, handler.EditPc)
 		pcApi.POST("/del/:id", m, handler.DelPC)
-
 		pcApi.POST("/count", m, handler.PcCount)
 		pcApi.GET("/ping/server", handler.ServerPing)
 		pcApi.POST("/off/:id", m, handler.PcOff)
@@ -98,12 +120,10 @@ func SetupRoutes(r *gin.Engine) {
 		pcApi.GET("/start/:lip", handler.StartPc)
 		pcApi.GET("/screen/:lip", handler.ScreenPc)
 		pcApi.POST("/link/:lip", handler.LinkPc)
-
 		pcApi.POST("/ls/:lip", handler.LSPc)
-
-		// pcApi.POST("/coment/:id")
 	}
 
+	// Группа для комнат
 	roomApi := r.Group("/room/api")
 	{
 		roomApi.POST("/new", m, handler.AddNewRoom)
@@ -114,11 +134,10 @@ func SetupRoutes(r *gin.Engine) {
 		roomApi.POST("/room/off/:id", m, handler.OffRoom)
 		roomApi.POST("/room/reboot/:id", m, handler.RebootRoom)
 		roomApi.POST("/room/link/:id", m, handler.LinkRoom)
-
 		roomApi.POST("/room/ls/:id", m, handler.LSRoom)
-
 	}
 
+	// Auth группа
 	authApi := r.Group("/auth/api")
 	{
 		authApi.POST("/login", handler.Login)
