@@ -20,6 +20,9 @@ func migrateModels() error {
 		&models.CPULoad{},
 		&models.RAMLoad{},
 		&models.NetworkLoad{},
+		&models.Class{},
+		&models.PublicTasks{},
+		&models.DeliveredTasks{},
 	}
 
 	for _, model := range modelsToMigrate {

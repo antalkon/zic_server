@@ -52,6 +52,9 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 
 	// Настраиваем статические файлы и шаблоны
 	r.Static("/static", "./web/static")
+	r.Static("/tasks", "./data/class")
+	r.Static("/delivered", "./data/dtask")
+
 	r.LoadHTMLGlob("web/public/**/*")
 
 	// Обработчик маршрутов, если маршрут не найден
@@ -66,8 +69,13 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 		if viper.GetBool("activate") {
 			main.GET("/", handler.LoginPage)
 			main.GET("/dashboard", m, handler.Dashboard)
+			main.GET("/tasks", handler.TasksPage)
+			main.GET("/d", handler.TasksDPage)
 			main.GET("/dashboard/settings", m, handler.SettingsPage)
 			main.GET("/dashboard/data", m, handler.DataPage)
+			main.GET("/dashboard/cloud", m, handler.CloudPage)
+			main.GET("/dashboard/cloud/class", m, handler.CClassPage)
+			main.GET("/dashboard/cloud/tasks", m, handler.CTaskPage)
 			main.GET("/dashboard/data/room/:id", m, handler.RoomDataPage)
 			main.GET("/dashboard/data/pc/:id", m, handler.PcDataPage)
 			main.GET("/dashboard/load/cpu", m, handler.LoadCPUPage)
@@ -98,11 +106,11 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 	// Группа для работы с инструментами
 	tools := r.Group("/tools/api")
 	{
-		tools.POST("/restart", m, handler.Restart)
 		tools.POST("/load/cpu", m, handler.LoadCPU)
 		tools.POST("/load/ram", m, handler.LoadRAM)
 		tools.POST("/load/network", m, handler.LoadNetwork)
 		tools.POST("/load/storage", m, handler.LoadStorage)
+		tools.GET("/clear", m, handler.Clear)
 	}
 
 	// Группа маршрутов для компьютеров
@@ -135,6 +143,27 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 		roomApi.POST("/room/reboot/:id", m, handler.RebootRoom)
 		roomApi.POST("/room/link/:id", m, handler.LinkRoom)
 		roomApi.POST("/room/ls/:id", m, handler.LSRoom)
+	}
+
+	cloudApi := r.Group("/cloud/api")
+	{
+		cloudApi.POST("/class", m, handler.CreateClass)
+		cloudApi.DELETE("/class/:id", m, handler.DelClass)
+		cloudApi.POST("/classes", handler.GetClasses)
+		cloudApi.POST("/tasks", m, handler.NewTask)
+		cloudApi.DELETE("/tasks/:id", m, handler.DelTask)
+
+		cloudApi.POST("/tasks/all", m, handler.AllTasks)
+
+		cloudApi.POST("/tasks/class/:id", handler.GetTaskClass)
+
+		cloudApi.POST("/tasks/delivery", handler.TaskDelivery)
+		cloudApi.GET("/tasks/delivery/d/:id", m, handler.DelTaskDel)
+
+		cloudApi.POST("/delivery/all/:id", m, handler.DeliveryAll)
+
+		cloudApi.GET("/delivery/checked/:id", m, handler.DeliveryChecked)
+
 	}
 
 	// Auth группа

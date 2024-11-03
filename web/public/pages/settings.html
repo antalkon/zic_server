@@ -92,16 +92,17 @@
                     <label for="password" class="block mb-2 text-lg font-medium text-gray-800 dark:text-white">Смена логина</label>
                     <input type="text" id="userName" class="w-full p-3 border border-gray-300 rounded-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-white" placeholder="Введите новое имя пользователя">
                 </div>
-                <!-- Смена пароля -->
                 <div class="mb-6">
                     <label for="password" class="block mb-2 text-lg font-medium text-gray-800 dark:text-white">Смена пароля</label>
                     <input type="password" id="password" class="w-full p-3 border border-gray-300 rounded-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-white" placeholder="Введите новый пароль">
                 </div>
-
+            
                 <!-- Кнопка сохранить пароль -->
                 <button id="save-password-button" class="w-full p-3 bg-blue-500 text-white font-bold rounded-lg">Отправить запрос на смены</button>
                 <p class="text-red-600 dark:text-red-300 mt-4">После нажатия кнопки, на почту Администратора зарегитсрированого через сайт zic.zentas.ru придет ссылка на подтверждение смены данных. Данные будут изменены только после подтверждения.</p>
-
+            
+                <!-- Кнопка очистить данные -->
+                <button onclick="cleardata()" class="w-full p-3 bg-red-500 text-white font-bold rounded-lg mt-6">Очистить</button>
             </div>
 
             <div id="sec-settings" class="sec-section hidden">
@@ -188,9 +189,30 @@
 
         // Изначально показываем "Основные" настройки
         switchTab('main');
+
+        function cleardata(){
+    const confirmed = confirm("Вы уверены что хотите очистить данные? Это приведет к удалению всех файлов заданий и статистики за 24 часа.");
+    if (confirmed) {
+        // Отправляем GET-запрос на /tools/api/clear
+        fetch('/tools/api/clear', {
+            method: 'GET'
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Данные успешно очищены!');
+            } else {
+                alert('Ошибка при очистке данных.');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при отправке запроса:', error);
+            alert('Ошибка при очистке данных.');
+        });
+    }
+}
     </script>
-    <script src="/static/js/settings.js"></script>
     <script src="/static/js/secSetting.js"></script>
+    <script src="/static/js/settings.js"></script>
 
 </body>
 </html>

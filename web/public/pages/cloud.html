@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+    {{template "cBInport.html" .}}
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
+    {{template "toasts.html" .}}
+    {{template "header.html" .}}
+
+    <main class="flex-grow flex items-center justify-center px-4 py-4 mt-3 w-full max-w-[96%] mx-auto">
+        <div class="bg-gray-100 dark:bg-neutral-800 rounded-lg p-8 max-w-lg w-full text-center shadow-md">
+            <h1 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">🔨В РАЗРАБОТКЕ </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+                Облако станет доступно в ближайшем обновлении, но вы можете уже воспользоваться некоторыми функциями системы. 
+                Функции: Классы и задания уже доступны!
+            </p>
+            <div class="flex space-x-4 justify-center">
+                <a href="/dashboard/cloud/class" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">Классы</a>
+                <a href="/dashboard/cloud/tasks" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">Задания</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    {{template "cFooter.html" .}}
+
+</body>
+</html>

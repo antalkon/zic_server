@@ -108,6 +108,7 @@
                 success: function(response) {
                     // Если успешный логин, показываем зеленый алерт
                     showAlert('Успешный вход!', 'success');
+                    location.replace('/dashboard')
                 },
                 error: function(xhr) {
                     // Если ошибка, показываем красный алерт

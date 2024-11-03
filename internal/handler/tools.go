@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// post перезагрузки
-func Restart(c *gin.Context) {
-	stools.Restart(c)
+func Clear(c *gin.Context) {
+	stools.Clear(c)
 }

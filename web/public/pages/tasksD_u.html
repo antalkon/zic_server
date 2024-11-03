@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Загрузка Выполненного Задания</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 font-sans leading-normal tracking-normal">
+
+  <!-- Container -->
+  <div class="container mx-auto p-8">
+    <!-- Header -->
+    <h1 class="text-4xl font-bold text-center text-blue-700 mb-8">Загрузка Выполненных Заданий</h1>
+    <p class="text-center text-gray-600 mb-8">Здесь вы можете загрузить выполненное задание для проверки учителем. Пожалуйста, заполните все поля перед отправкой.</p>
+
+    <!-- Upload Form -->
+    <div class="bg-white shadow-xl rounded-lg p-8 mb-8">
+      <form id="uploadForm" class="space-y-6">
+        
+        <!-- Student Names Input -->
+        <div>
+          <label for="studentNames" class="block text-lg font-medium text-gray-700">Имена и Фамилии <span class="text-sm text-gray-500">(если работали в группе, укажите через запятую)</span></label>
+          <input type="text" id="studentNames" name="studentNames" required
+                 class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите ваши имена и фамилии" />
+        </div>
+
+        <!-- Class Selection -->
+        <div>
+          <label for="classSelect" class="block text-lg font-medium text-gray-700">Выберите Класс</label>
+          <select id="classSelect" name="classSelect" required
+                  class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Выберите класс</option>
+          </select>
+        </div>
+
+        <!-- Comment Input -->
+        <div>
+          <label for="comment" class="block text-lg font-medium text-gray-700">Комментарий <span class="text-sm text-gray-500">(если есть что добавить)</span></label>
+          <textarea id="comment" name="comment" rows="4"
+                    class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите комментарий, если необходимо"></textarea>
+        </div>
+
+        <!-- File Upload (Drag and Drop) -->
+        <div>
+          <label class="block text-lg font-medium text-gray-700">Загрузка Файлов</label>
+          <div id="dropZone" class="mt-2 flex justify-center items-center p-6 border-2 border-dashed border-blue-500 rounded-lg bg-blue-50 cursor-pointer hover:bg-blue-100 transition-all">
+            <p class="text-blue-600 font-semibold text-center">Перетащите файлы сюда или нажмите для выбора</p>
+          </div>
+          <p class="mt-2 text-sm text-red-500 text-center">Если более одного файла, сожмите их в zip-архив.</p>
+          <input type="file" id="fileInput" name="file" multiple hidden>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+          <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Отправить
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Загружаем классы при загрузке страницы
+    document.addEventListener("DOMContentLoaded", async () => {
+      const classSelect = document.getElementById("classSelect");
+      try {
+        const response = await fetch("/cloud/api/classes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const classes = await response.json();
+
+        // Заполняем выпадающий список классами
+        classes.forEach(cls => {
+          const option = document.createElement("option");
+          option.value = cls.id;
+          option.textContent = `${cls.number}${cls.letter}`;
+          classSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Ошибка загрузки классов:", error);
+      }
+    });
+
+    // Drag and Drop функциональность
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
+
+    dropZone.addEventListener("click", () => fileInput.click());
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("bg-blue-100");
+    });
+    dropZone.addEventListener("dragleave", () => dropZone.classList.remove("bg-blue-100"));
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("bg-blue-100");
+      fileInput.files = e.dataTransfer.files;
+    });
+
+    // Обработчик отправки формы
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  // Подготовка JSON данных для отправки
+  const data = {
+    students: document.getElementById("studentNames").value,
+    class_id: parseInt(document.getElementById("classSelect").value, 10), // Преобразуем в число
+    comment: document.getElementById("comment").value,
+  };
+
+  // Проверка на наличие файла
+  const files = fileInput.files;
+  if (files.length === 0) {
+    alert("Пожалуйста, добавьте файл перед отправкой.");
+    return;
+  }
+
+  // Создаем FormData и добавляем JSON как строку
+  const formData = new FormData();
+  formData.append("data", JSON.stringify(data)); // Преобразованный JSON в виде строки
+  formData.append("file", files[0]); // Добавляем файл
+
+  try {
+    // Отправляем POST-запрос
+    const response = await fetch("/cloud/api/tasks/delivery", {
+      method: "POST",
+      body: formData, // отправляем данные в FormData, чтобы включить файл и JSON
+    });
+
+    if (response.ok) {
+      alert("Задание успешно отправлено!");
+    } else {
+      alert("Ошибка при отправке задания.");
+    }
+  } catch (error) {
+    console.error("Ошибка отправки задания:", error);
+  }
+});
+
+  </script>
+</body>
+</html>

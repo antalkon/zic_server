@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Учебные Задания</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+  <!-- Container -->
+  <div class="container mx-auto p-8">
+    <!-- Header -->
+    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Получение Заданий</h1>
+
+    <!-- Class Selection Form -->
+    <div class="bg-white shadow-lg rounded-lg p-8 mb-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Выберите Класс</h2>
+      <form id="classSelectionForm" class="flex items-center space-x-4">
+        <select id="classSelect" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+          <option value="">Выберите класс</option>
+        </select>
+        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 focus:outline-none">
+          Выбрать
+        </button>
+      </form>
+    </div>
+
+    <!-- Tasks Display -->
+    <div id="tasksSection" class="hidden bg-white shadow-lg rounded-lg p-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Список Заданий</h2>
+      <ul id="tasksList" class="space-y-4"></ul>
+    </div>
+  </div>
+
+  <script>
+    // Загружаем классы при загрузке страницы
+    document.addEventListener("DOMContentLoaded", async () => {
+      const classSelect = document.getElementById("classSelect");
+      try {
+        const response = await fetch("/cloud/api/classes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const classes = await response.json();
+
+        // Заполняем выпадающий список классами
+        classes.forEach(cls => {
+          const option = document.createElement("option");
+          option.value = cls.id;
+          option.textContent = `${cls.number}${cls.letter}`;
+          classSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Ошибка загрузки классов:", error);
+      }
+    });
+
+    // Обрабатываем выбор класса
+    document.getElementById("classSelectionForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const selectedClassId = document.getElementById("classSelect").value;
+      if (!selectedClassId) return;
+
+      try {
+        const response = await fetch(`/cloud/api/tasks/class/${selectedClassId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const tasks = await response.json();
+        
+        // Отображаем задания
+        const tasksList = document.getElementById("tasksList");
+        tasksList.innerHTML = ""; // Очищаем предыдущие задания
+        tasks.forEach(task => {
+          const listItem = document.createElement("li");
+          listItem.className = "flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-md";
+          listItem.innerHTML = `
+            <span class="text-lg text-gray-800">${task.title}</span>
+            <a href="/tasks/${task.folder_id}/${task.file}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 focus:outline-none" download>
+              Скачать
+            </a>
+          `;
+          tasksList.appendChild(listItem);
+        });
+        
+        // Показываем блок с заданиями
+        document.getElementById("tasksSection").classList.remove("hidden");
+      } catch (error) {
+        console.error("Ошибка загрузки заданий:", error);
+      }
+    });
+  </script>
+</body>
+</html>
