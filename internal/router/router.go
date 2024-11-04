@@ -147,6 +147,8 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 
 	cloudApi := r.Group("/cloud/api")
 	{
+		cloudApi.POST("/sys/count", m, handler.TasksCount)
+
 		cloudApi.POST("/class", m, handler.CreateClass)
 		cloudApi.DELETE("/class/:id", m, handler.DelClass)
 		cloudApi.POST("/classes", handler.GetClasses)

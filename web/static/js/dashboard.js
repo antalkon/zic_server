@@ -33,6 +33,23 @@ function updateRoomOnlineBlock() {
         countElement.textContent = `${result.on} из ${result.count}`;
     });
 }
+function updatTasksOnlineBlock() {
+    sendPostRequest('/cloud/api/sys/count', {}, function(result) {
+        const countElement = document.getElementById('room-checked-count');
+        const circleElement = document.getElementById('room-checked-circle');  // Исправлено 'rooom' на 'room'
+        console.log(result)
+        // Удаляем все классы, кроме базовых
+        countElement.className = 'text-3xl font-bold'; // Базовые классы для текста
+        circleElement.className = 'w-3 h-3 rounded-full pulse mr-2'; // Базовые классы для кружка
+
+        // Динамически добавляем цвет текста и фона
+        countElement.classList.add(`text-${result.color}`);  // Для текста, динамически добавляем класс цвета
+        circleElement.classList.add(`bg-${result.color}`);    // Для кружка, динамически добавляем класс фона
+
+        // Обновляем текст
+        countElement.textContent = `${result.pending} из ${result.all}`;
+    });
+}
 
 function updateStatOnlineBlock() {
     sendPostRequest('/setting/api/sys/status', {}, function(result) {
@@ -54,6 +71,8 @@ function updateStatOnlineBlock() {
 
 // Вызываем функцию сразу после загрузки страницы
 document.addEventListener("DOMContentLoaded", function() {
+    updatTasksOnlineBlock();
+
     updatePcOnlineBlock(); // Обновление при загрузке страницы
     updateRoomOnlineBlock();
     updateStatOnlineBlock();
@@ -65,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function refresh() {
     showOverlay();  // Показываем overlay
+
     updatePcOnlineBlock();  // Обновляем блоки
     updateRoomOnlineBlock();
     updateStatOnlineBlock();

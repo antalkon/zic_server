@@ -18,6 +18,9 @@
     <main class="flex-grow px-4 py-4 mt-3 w-full max-w-[96%] mx-auto">
         {{ if not .setting }}
             {{template "cSettingBanner.html" .}}
+        {{else}}
+        {{template "cAVersionBanner.html" .}}
+        
         {{ end }}
 
         <!-- Основная статистика -->
@@ -67,8 +70,8 @@
                     <h3 class="truncate-title text-sm font-medium text-gray-600 dark:text-neutral-400"><span class="inline-flex items-center gap-x-1 py-1 px-2 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-500">🔨 dev</span> Заданий на проверке</h3>
                     <div class="flex justify-between items-end">
                         <div class="flex items-center">
-                            <div class="w-3 h-3 rounded-full bg-red-500 pulse mr-2"></div>
-                            <span class="text-3xl font-bold text-red-500">N/D</span>
+                            <div id="room-checked-circle" class="w-3 h-3 rounded-full bg-red-500 pulse mr-2"></div>
+                            <span id="room-checked-count" class="text-3xl font-bold text-red-500">N/D</span>
                         </div>
                     </div>
                 </div>        

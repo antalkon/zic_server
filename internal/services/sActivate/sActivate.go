@@ -1,12 +1,7 @@
 package sactivate
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-	"time"
 
 	"github.com/antalkon/zic_server/internal/models"
 	"github.com/antalkon/zic_server/pkg/config"
@@ -87,27 +82,28 @@ func SetConfig() error {
 // SendActivationRequest sends an activation request to the server.
 func SendActivationRequest(code string, requestData models.SActivateRequest) error {
 	// Serialize request data to JSON
-	jsonData, err := json.Marshal(requestData)
-	if err != nil {
-		return fmt.Errorf("error serializing request data: %v", err)
-	}
-	// Define the HTTP client with a timeout
-	client := &http.Client{Timeout: 10 * time.Second}
-	// Send POST request to the server
-	url := fmt.Sprintf("http://zic.zentas.ru/actions/api/v1/add/server/join/%s", code)
-	resp, err := client.Post(url, "application/json", bytes.NewBuffer(jsonData))
-	if err != nil {
-		return fmt.Errorf("error sending POST request: %v", err)
-	}
-	defer resp.Body.Close()
-	// Read the response body
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("error reading response body: %v", err)
-	}
-	// Check if the status code is not OK
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("server returned an error: %s, status code: %d", string(body), resp.StatusCode)
-	}
+	// jsonData, err := json.Marshal(requestData)
+	// if err != nil {
+	// 	return fmt.Errorf("error serializing request data: %v", err)
+	// }
+	// // Define the HTTP client with a timeout
+	// client := &http.Client{Timeout: 10 * time.Second}
+	// // Send POST request to the server
+	// url := fmt.Sprintf("http://zic.zentas.ru/actions/api/v1/add/server/join/%s", code)
+	// resp, err := client.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	// if err != nil {
+	// 	return fmt.Errorf("error sending POST request: %v", err)
+	// }
+	// defer resp.Body.Close()
+	// // Read the response body
+	// body, err := io.ReadAll(resp.Body)
+	// if err != nil {
+	// 	return fmt.Errorf("error reading response body: %v", err)
+	// }
+	// // Check if the status code is not OK
+	// if resp.StatusCode != http.StatusOK {
+	// 	return fmt.Errorf("server returned an error: %s, status code: %d", string(body), resp.StatusCode)
+	// }
+
 	return nil
 }
