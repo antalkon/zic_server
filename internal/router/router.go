@@ -129,6 +129,9 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 		pcApi.GET("/screen/:lip", handler.ScreenPc)
 		pcApi.POST("/link/:lip", handler.LinkPc)
 		pcApi.POST("/ls/:lip", handler.LSPc)
+
+		pcApi.GET("/vnc/:id", handler.VncPC)
+
 	}
 
 	// Группа для комнат

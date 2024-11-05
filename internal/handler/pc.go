@@ -74,3 +74,7 @@ func EditPc(c *gin.Context) {
 func DelPC(c *gin.Context) {
 	spc.Del(c)
 }
+
+func VncPC(c *gin.Context) {
+	spc.Vnc(c)
+}
