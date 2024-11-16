@@ -1,0 +1,2 @@
+time="2024-11-17T00:41:54+05:00" level=info msg="Режим сервера: Разработка (Debug)"
+time="2024-11-17T00:41:54+05:00" level=fatal msg="Ошибка инициализации базы данных: %vfailed to connect database: failed to connect to `host=localhost user=alex database=ZIC-SERVER-main`: dial error (dial tcp 127.0.0.1:5444: connect: connection refused)"
