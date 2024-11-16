@@ -6,7 +6,7 @@
 - Верия 1.22!
 
 ### Docker:
-- **База данных пше** (port: 5444; user: alex; password: alex; db: ZIC-SERVER-main)
+- **База данных postgres** (port: 5444; user: alex; password: alex; db: ZIC-SERVER-main)
 ```
 docker run -d --name ZIC_DB_pg -e POSTGRES_USER=alex -e POSTGRES_PASSWORD=alex -e POSTGRES_DB=ZIC-SERVER-main -p 5444:5432 postgres:latest
 ```
@@ -25,3 +25,4 @@ docker run -d --name ZIC_DB_pg -e POSTGRES_USER=alex -e POSTGRES_PASSWORD=alex -
 
 ## Project Team:
 antalkon - https://github.com/antalkon
+BHapppy - https://github.com/BHapppy
