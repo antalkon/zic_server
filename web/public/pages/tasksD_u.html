@@ -5,61 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Загрузка Выполненного Задания</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-blue-50 font-sans leading-normal tracking-normal">
+  <style>
+    /* Плавный фон с мягкими переходами */
+    body {
+      background: radial-gradient(circle at 20% 30%, rgba(74, 163, 223, 0.3), rgba(135, 206, 250, 0.2), rgba(209, 236, 255, 0.1), rgba(255, 255, 255, 0.05));
+      background-size: 300% 300%;
+      animation: smoothWave 15s ease-in-out infinite;
+    }
 
-  <!-- Container -->
-  <div class="container mx-auto p-8">
-    <!-- Header -->
-    <h1 class="text-4xl font-bold text-center text-blue-700 mb-8">Загрузка Выполненных Заданий</h1>
-    <p class="text-center text-gray-600 mb-8">Здесь вы можете загрузить выполненное задание для проверки учителем. Пожалуйста, заполните все поля перед отправкой.</p>
+    @keyframes smoothWave {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Основной контейнер */
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Файл загружен */
+    .uploaded-file {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f9ff;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      color: #1a73e8;
+      font-weight: 500;
+    }
+    
+    /* Кнопка удаления файла */
+    .remove-file-btn {
+      cursor: pointer;
+      color: #ff4d4d;
+      font-weight: bold;
+      margin-left: 1rem;
+    }
+  </style>
+</head>
+<body class="font-sans leading-normal tracking-normal text-gray-800 flex flex-col items-center min-h-screen justify-center">
+
+  <!-- Main Form Container -->
+  <div class="form-container max-w-lg w-full">
+
+    <!-- Header and Subtitle -->
+    <h1 class="text-3xl font-bold text-blue-700 text-center mb-2">Загрузка Выполненных Заданий</h1>
+    <p class="text-center text-gray-600 mb-6">Заполните поля и загрузите файл для отправки учителю.</p>
 
     <!-- Upload Form -->
-    <div class="bg-white shadow-xl rounded-lg p-8 mb-8">
-      <form id="uploadForm" class="space-y-6">
-        
-        <!-- Student Names Input -->
-        <div>
-          <label for="studentNames" class="block text-lg font-medium text-gray-700">Имена и Фамилии <span class="text-sm text-gray-500">(если работали в группе, укажите через запятую)</span></label>
-          <input type="text" id="studentNames" name="studentNames" required
-                 class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите ваши имена и фамилии" />
-        </div>
+    <form id="uploadForm" class="space-y-6">
 
-        <!-- Class Selection -->
-        <div>
-          <label for="classSelect" class="block text-lg font-medium text-gray-700">Выберите Класс</label>
-          <select id="classSelect" name="classSelect" required
-                  class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">Выберите класс</option>
-          </select>
-        </div>
+      <!-- Student Names Input -->
+      <div>
+        <label for="studentNames" class="block text-lg font-medium text-gray-700">Имена и Фамилии <span class="text-sm text-gray-500">(укажите через запятую)</span></label>
+        <input type="text" id="studentNames" name="studentNames" required
+               class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите ваши имена и фамилии" />
+      </div>
 
-        <!-- Comment Input -->
-        <div>
-          <label for="comment" class="block text-lg font-medium text-gray-700">Комментарий <span class="text-sm text-gray-500">(если есть что добавить)</span></label>
-          <textarea id="comment" name="comment" rows="4"
-                    class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите комментарий, если необходимо"></textarea>
-        </div>
+      <!-- Class Selection -->
+      <div>
+        <label for="classSelect" class="block text-lg font-medium text-gray-700">Выберите Класс</label>
+        <select id="classSelect" name="classSelect" required
+                class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">Выберите класс</option>
+        </select>
+      </div>
 
-        <!-- File Upload (Drag and Drop) -->
-        <div>
-          <label class="block text-lg font-medium text-gray-700">Загрузка Файлов</label>
-          <div id="dropZone" class="mt-2 flex justify-center items-center p-6 border-2 border-dashed border-blue-500 rounded-lg bg-blue-50 cursor-pointer hover:bg-blue-100 transition-all">
-            <p class="text-blue-600 font-semibold text-center">Перетащите файлы сюда или нажмите для выбора</p>
-          </div>
-          <p class="mt-2 text-sm text-red-500 text-center">Если более одного файла, сожмите их в zip-архив.</p>
-          <input type="file" id="fileInput" name="file" multiple hidden>
-        </div>
+      <!-- Comment Input -->
+      <div>
+        <label for="comment" class="block text-lg font-medium text-gray-700">Комментарий <span class="text-sm text-gray-500">(опционально)</span></label>
+        <textarea id="comment" name="comment" rows="4"
+                  class="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите комментарий, если необходимо"></textarea>
+      </div>
 
-        <!-- Submit Button -->
-        <div class="text-center">
-          <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Отправить
-          </button>
+      <!-- File Upload Section with Status -->
+      <div>
+        <label class="block text-lg font-medium text-gray-700">Загрузка Файла</label>
+        <div id="dropZone" class="mt-2 flex justify-center items-center p-6 border-2 border-dashed border-blue-500 rounded-lg bg-blue-50 cursor-pointer hover:bg-blue-100 transition-all">
+          <p class="text-blue-600 font-semibold text-center">Перетащите файл сюда или нажмите для выбора</p>
         </div>
-      </form>
-    </div>
+        <p class="mt-2 text-sm text-red-500 text-center">Разрешен только один файл. Если загрузили неверный файл, удалите его и загрузите новый.</p>
+        <input type="file" id="fileInput" name="file" hidden>
+
+        <!-- Uploaded File Display -->
+        <div id="uploadedFile" class="uploaded-file hidden">
+          <span id="fileName">Загружен файл: example.zip</span>
+          <span class="remove-file-btn" onclick="removeFile()">✖</span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Отправить
+        </button>
+      </div>
+    </form>
   </div>
+
+  <!-- Footer with version -->
+  <footer class="text-center mt-8 text-gray-500 text-sm">
+    ZIC Upload Tasks V1.0 (β)
+  </footer>
 
   <script>
     // Загружаем классы при загрузке страницы
@@ -89,59 +143,83 @@
     // Drag and Drop функциональность
     const dropZone = document.getElementById("dropZone");
     const fileInput = document.getElementById("fileInput");
+    const uploadedFile = document.getElementById("uploadedFile");
+    const fileNameDisplay = document.getElementById("fileName");
 
+    // Click to trigger file input
     dropZone.addEventListener("click", () => fileInput.click());
+
+    // Drag and drop file handling
     dropZone.addEventListener("dragover", (e) => {
       e.preventDefault();
       dropZone.classList.add("bg-blue-100");
     });
+
     dropZone.addEventListener("dragleave", () => dropZone.classList.remove("bg-blue-100"));
+
     dropZone.addEventListener("drop", (e) => {
       e.preventDefault();
       dropZone.classList.remove("bg-blue-100");
-      fileInput.files = e.dataTransfer.files;
+
+      const file = e.dataTransfer.files[0];
+      handleFileUpload(file);
     });
+
+    // Handle file selection from file input
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      handleFileUpload(file);
+    });
+
+    // Display uploaded file and allow removal
+    function handleFileUpload(file) {
+      if (!file) return;
+      fileNameDisplay.textContent = `Загружен файл: ${file.name}`;
+      uploadedFile.classList.remove("hidden");
+    }
+
+    function removeFile() {
+      fileInput.value = "";
+      uploadedFile.classList.add("hidden");
+      fileNameDisplay.textContent = "";
+    }
 
     // Обработчик отправки формы
     document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+      e.preventDefault();
 
-  // Подготовка JSON данных для отправки
-  const data = {
-    students: document.getElementById("studentNames").value,
-    class_id: parseInt(document.getElementById("classSelect").value, 10), // Преобразуем в число
-    comment: document.getElementById("comment").value,
-  };
+      const data = {
+        students: document.getElementById("studentNames").value,
+        class_id: parseInt(document.getElementById("classSelect").value, 10),
+        comment: document.getElementById("comment").value,
+      };
 
-  // Проверка на наличие файла
-  const files = fileInput.files;
-  if (files.length === 0) {
-    alert("Пожалуйста, добавьте файл перед отправкой.");
-    return;
-  }
+      const files = fileInput.files;
+      if (files.length === 0) {
+        alert("Пожалуйста, добавьте файл перед отправкой.");
+        return;
+      }
 
-  // Создаем FormData и добавляем JSON как строку
-  const formData = new FormData();
-  formData.append("data", JSON.stringify(data)); // Преобразованный JSON в виде строки
-  formData.append("file", files[0]); // Добавляем файл
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(data));
+      formData.append("file", files[0]);
 
-  try {
-    // Отправляем POST-запрос
-    const response = await fetch("/cloud/api/tasks/delivery", {
-      method: "POST",
-      body: formData, // отправляем данные в FormData, чтобы включить файл и JSON
+      try {
+        const response = await fetch("/cloud/api/tasks/delivery", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          alert("Задание успешно отправлено!");
+          removeFile();
+        } else {
+          alert("Ошибка при отправке задания.");
+        }
+      } catch (error) {
+        console.error("Ошибка отправки задания:", error);
+      }
     });
-
-    if (response.ok) {
-      alert("Задание успешно отправлено!");
-    } else {
-      alert("Ошибка при отправке задания.");
-    }
-  } catch (error) {
-    console.error("Ошибка отправки задания:", error);
-  }
-});
-
   </script>
 </body>
 </html>

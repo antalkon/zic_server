@@ -1,47 +1,47 @@
 <!-- Существующее модальное окно для добавления компьютера -->
-<div id="add-computer-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50">
-  <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
+<div id="add-computer-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50 dark:bg-opacity-70">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-lg p-6 rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">Добавить компьютер</h3>
-      <button onclick="closeModal('add-computer-modal')" class="text-gray-500 hover:text-gray-700">&times;</button>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Добавить компьютер</h3>
+      <button onclick="closeModal('add-computer-modal')" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">&times;</button>
     </div>
     <form id="add-computer-form" class="space-y-4">
       <div>
-        <label for="computer-name" class="block text-sm font-medium text-gray-700">Введите имя компьютера</label>
-        <input type="text" id="computer-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        <label for="computer-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Введите имя компьютера</label>
+        <input type="text" id="computer-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring focus:ring-opacity-50 dark:focus:ring-opacity-50 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100" required>
       </div>
       <div>
-        <label for="local-ip" class="block text-sm font-medium text-gray-700">Укажите локальный IP адрес компьютера</label>
-        <input type="text" id="local-ip" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        <label for="local-ip" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Укажите локальный IP адрес компьютера</label>
+        <input type="text" id="local-ip" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring focus:ring-opacity-50 dark:focus:ring-opacity-50 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100" required>
       </div>
       <div>
-        <label for="public-ip" class="block text-sm font-medium text-gray-700">Укажите публичный IP адрес в сети компьютера</label>
-        <input type="text" id="public-ip" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        <label for="public-ip" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Укажите публичный IP адрес в сети компьютера</label>
+        <input type="text" id="public-ip" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring focus:ring-opacity-50 dark:focus:ring-opacity-50 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100" required>
       </div>
     </form>
     <div class="mt-4 flex justify-end space-x-2">
-      <button onclick="closeModal('add-computer-modal')" class="px-4 py-2 bg-gray-200 rounded-md">Закрыть</button>
-      <button onclick="submitComputerForm({{.id}})" class="px-4 py-2 bg-blue-600 text-white rounded-md">Добавить</button>
+      <button onclick="closeModal('add-computer-modal')" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 dark:text-gray-100 rounded-md">Закрыть</button>
+      <button onclick="submitComputerForm({{.id}})" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Добавить</button>
     </div>
   </div>
 </div>
 
 <!-- Новое модальное окно для ввода URL -->
-<div id="url-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50">
-  <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
+<div id="url-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50 dark:bg-opacity-70">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-lg p-6 rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">Ввести URL</h3>
-      <button onclick="closeModal('url-modal')" class="text-gray-500 hover:text-gray-700">&times;</button>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Ввести URL</h3>
+      <button onclick="closeModal('url-modal')" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">&times;</button>
     </div>
     <form id="url-form" class="space-y-4">
       <div>
-        <label for="input-url" class="block text-sm font-medium text-gray-700">Введите URL</label>
-        <input type="url" id="input-url" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        <label for="input-url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Введите URL</label>
+        <input type="url" id="input-url" class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring focus:ring-opacity-50 dark:focus:ring-opacity-50 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100" required>
       </div>
     </form>
     <div class="mt-4 flex justify-end space-x-2">
-      <button onclick="closeModal('url-modal')" class="px-4 py-2 bg-gray-200 rounded-md">Закрыть</button>
-      <button onclick="submitUrlForm({{.id}})" class="px-4 py-2 bg-blue-600 text-white rounded-md">Отправить</button>
+      <button onclick="closeModal('url-modal')" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 dark:text-gray-100 rounded-md">Закрыть</button>
+      <button onclick="submitUrlForm({{.id}})" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Отправить</button>
     </div>
   </div>
 </div>
@@ -63,12 +63,15 @@
     const lip = document.getElementById("local-ip").value;
     const pip = document.getElementById("public-ip").value;
 
+    id = parseInt(id)
+
     const data = {
       "room": id,
       "name": name,
       "lip": lip,
       "pip": pip
     };
+    console.log(data)
 
     fetch(`/pc/api/new/`, {
       method: "POST",

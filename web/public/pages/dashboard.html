@@ -98,29 +98,65 @@
 
         <!-- Действия с системой -->
         <div class="w-full bg-white dark:bg-neutral-800 rounded-lg py-6 px-6 shadow-xl mb-6">
-            <h2 class="text-2xl font-bold mb-4">Действия с системой</h2>
-            <p class="text-md mb-6">
-                Выберите действие для управления системой Zentas Infromatic Class. Для выполнения действия нажмите на нужную карточку.
+            <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Действия с системой</h2>
+            <p class="text-md mb-6 text-gray-600 dark:text-gray-400">
+                Выберите действие для управления системой Zentas Informatic Class. Для выполнения действия нажмите на нужную карточку.
             </p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div onclick="openModal('block')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Заблокировать</p>
+            <!-- Сетка с карточками -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <!-- Карточка "Заблокировать" -->
+                <div onclick="openModal('block')" class="bg-blue-600 dark:bg-blue-600 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center aspect-video max-h-36">
+                    <div class="w-12 h-12 rounded-full bg-blue-700 dark:bg-blue-900 flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                            <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-base font-semibold text-white dark:text-neutral-300">Заблокировать</p>
                 </div>
-                <div onclick="openModal('unblock')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Разблокировать</p>
-                </div>            
-                <div onclick="openModal('link')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Открыть ссылку</p>
-                </div>            
-                <div onclick="openModal('off')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Выключить ПК</p>
-                </div>            
-                <div onclick="openModal('reboot')" class="bg-blue-500 dark:bg-blue-800 p-4 rounded-lg shadow relative h-40 flex justify-between transition-colors duration-300 hover:bg-blue-400 dark:hover:bg-blue-700 cursor-pointer">
-                    <p class="absolute bottom-2 left-2 text-lg font-semibold text-white dark:text-neutral-400 truncate-title">Перезагрузить ПК</p>
+        
+                <!-- Карточка "Разблокировать" -->
+                <div onclick="openModal('unblock')" class="bg-blue-600 dark:bg-blue-600 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center aspect-video max-h-36">
+                    <div class="w-12 h-12 rounded-full bg-blue-700 dark:bg-blue-900 flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                            <path d="M240-640h360v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85h-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640Zm0 480h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-base font-semibold text-white dark:text-neutral-300">Разблокировать</p>
+                </div>
+        
+                <!-- Карточка "Открыть ссылку" -->
+                <div onclick="openModal('link')" class="bg-blue-600 dark:bg-blue-600 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center aspect-video max-h-36">
+                    <div class="w-12 h-12 rounded-full bg-blue-700 dark:bg-blue-900 flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                            <path d="M200-160q-33 0-56.5-23.5T120-240v-560q0-33 23.5-56.5T200-880h560q33 0 56.5 23.5T840-800v284q-10-2-19.5-3t-20.5-1h-40v-280H200v560h124q4 22 10.5 42t17.5 38H200Zm0-120v40-560 520Zm80-40h44q8-49 35-90.5t69-69.5H280v160Zm0-240h160v-160H280v160Zm280 440q-66 0-113-47t-47-113q0-66 47-113t113-47h80v80h-80q-33 0-56.5 23.5T480-280q0 33 23.5 56.5T560-200h80v80h-80Zm-40-440h160v-160H520v160Zm40 320v-80h240v80H560Zm160 120v-80h80q33 0 56.5-23.5T880-280q0-33-23.5-56.5T800-360h-80v-80h80q66 0 113 46.5T960-280q0 66-47 113t-113 47h-80Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-base font-semibold text-white dark:text-neutral-300">Открыть ссылку</p>
+                </div>
+        
+                <!-- Карточка "Выключить ПК" -->
+                <div onclick="openModal('off')" class="bg-blue-600 dark:bg-blue-600 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center aspect-video max-h-36">
+                    <div class="w-12 h-12 rounded-full bg-blue-700 dark:bg-blue-900 flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                            <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-84 31.5-156.5T197-763l56 56q-44 44-68.5 102T160-480q0 134 93 227t227 93q134 0 227-93t93-227q0-67-24.5-125T707-707l56-56q54 54 85.5 126.5T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-440h80v440h-80Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-base font-semibold text-white dark:text-neutral-300">Выключить ПК</p>
+                </div>
+        
+                <!-- Карточка "Перезагрузить ПК" -->
+                <div onclick="openModal('reboot')" class="bg-blue-600 dark:bg-blue-600 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center aspect-video max-h-36">
+                    <div class="w-12 h-12 rounded-full bg-blue-700 dark:bg-blue-900 flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                            <path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/>
+                        </svg>
+                    </div>
+                    <p class="text-base font-semibold text-white dark:text-neutral-300">Перезагрузить ПК</p>
                 </div>
             </div>
-         </div>
-    </main>
+        </div>
+        
+            </main>
 
     <!-- Footer и модальные окна -->
     {{template "cFooter.html" .}}
