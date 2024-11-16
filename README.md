@@ -17,3 +17,5 @@ docker run -d --name ZIC_DB_pg -e POSTGRES_USER=alex -e POSTGRES_PASSWORD=alex -
 - Запуск в ручную
 ```go run cmd/app/main.go```
 
+## Project Team:
+antalkon - https://github.com/antalkon
