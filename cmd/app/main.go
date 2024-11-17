@@ -54,7 +54,7 @@ func main() {
 	if viper.GetBool("activate") {
 		// Инициализация базы данных
 		if err := pggorm.InitDB(); err != nil {
-			log.Fatal("Ошибка инициализации базы данных: %v", err)
+			log.Fatal(err)
 			return
 		}
 

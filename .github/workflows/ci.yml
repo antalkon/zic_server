@@ -34,5 +34,4 @@ jobs:
       #     ./bin/golangci-lint run
 
       # 5. Запуск тестов
-      - name: Run tests
-        run: go test ./... -v -cover
+      

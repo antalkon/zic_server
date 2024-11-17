@@ -1,0 +1,2 @@
+time="2024-11-17T14:48:03+05:00" level=warning msg="Неопознанный режим. Установлен режим по умолчанию: Продакшен (Release)"
+time="2024-11-17T14:48:03+05:00" level=error msg="Ошибка загрузки конфигурации: Config File \"server\" Not Found in \"[/Users/antalkon/Documents/zic_server/cmd/app/configs]\""

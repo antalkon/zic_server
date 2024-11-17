@@ -19,7 +19,7 @@ func PcBlock(c *gin.Context) {
 
 	resp, err := http.Get(fmt.Sprintf("http://%s:3000/pc/block", lip))
 	if err != nil {
-		c.JSON(500, gin.H{"error": fmt.Errorf("Failed to send block request to PC. %w", err.Error())})
+		c.JSON(500, gin.H{"error": fmt.Errorf("failed to change status: %w", err)})
 		return
 	}
 	defer resp.Body.Close()
@@ -44,7 +44,7 @@ func PcUnBlock(c *gin.Context) {
 
 	resp, err := http.Get(fmt.Sprintf("http://%s:3000/pc/unblock", lip))
 	if err != nil {
-		c.JSON(500, gin.H{"error": fmt.Errorf("Failed to send block request to PC. %w", err.Error())})
+		c.JSON(500, gin.H{"error": fmt.Errorf("failed to change status: %w", err)})
 		return
 	}
 	defer resp.Body.Close()

@@ -13,7 +13,7 @@ func PcCount(c *gin.Context) {
 
 	err, count, on := pcpg.GetPcCountAndOn()
 	if err != nil {
-		c.JSON(500, gin.H{"error": fmt.Errorf("Не удалось обновить информацию активных ПК. %w", err.Error())})
+		c.JSON(500, gin.H{"error": fmt.Errorf("failed to change status: %w", err)})
 		return
 	}
 	if on == 0 {
