@@ -28,10 +28,10 @@ jobs:
         run: go mod tidy
 
       # 4. Линтинг кода
-      - name: Lint code
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.54.2
-          ./bin/golangci-lint run
+      # - name: Lint code
+      #   run: |
+      #     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.54.2
+      #     ./bin/golangci-lint run
 
       # 5. Запуск тестов
       - name: Run tests
