@@ -1,19 +1,31 @@
 <!-- Существующее модальное окно для добавления компьютера -->
 <div id="add-computer-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50">
-  <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
+  <div class="bg-white dark:bg-neutral-800 w-full max-w-lg p-6 rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">Добавить кабинета</h3>
-      <button onclick="closeModal('add-computer-modal')" class="text-gray-500 hover:text-gray-700">&times;</button>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Добавить кабинет</h3>
+      <button onclick="closeModal('add-computer-modal')" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">&times;</button>
     </div>
     <form id="add-computer-form" class="space-y-4">
       <div>
-        <label for="computer-name" class="block text-sm font-medium text-gray-700">Введите название кабинета</label>
-        <input type="text" id="computer-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        <label for="computer-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Введите название кабинета</label>
+        <input 
+          type="text" 
+          id="computer-name" 
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-md shadow-sm focus:ring focus:ring-opacity-50 dark:bg-neutral-700 dark:text-white" 
+          required>
       </div>
     </form>
     <div class="mt-4 flex justify-end space-x-2">
-      <button onclick="closeModal('add-computer-modal')" class="px-4 py-2 bg-gray-200 rounded-md">Закрыть</button>
-      <button onclick="submitComputerForm({{.id}})" class="px-4 py-2 bg-blue-600 text-white rounded-md">Добавить</button>
+      <button 
+        onclick="closeModal('add-computer-modal')" 
+        class="px-4 py-2 bg-gray-200 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-neutral-600">
+        Закрыть
+      </button>
+      <button 
+        onclick="submitComputerForm({{.id}})" 
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+        Добавить
+      </button>
     </div>
   </div>
 </div>

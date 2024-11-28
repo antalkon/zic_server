@@ -1,6 +1,7 @@
 activate: true
 env: local
 http_server:
+    ssl: false
     address: 0.0.0.0:8385
     idle_timeout: 60s
     timeout: 4s
@@ -8,4 +9,4 @@ http_server:
 password: alex
 port: "5444"
 user: alex
-version: "1.0(β) pre-release"
+version: "1.0(β)"

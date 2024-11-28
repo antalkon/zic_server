@@ -53,6 +53,8 @@ func AddPc(c *gin.Context) {
 		"local_ip":  lip,
 		"public_ip": pip,
 		"port":      8385,
+		"id":        id,
+		"name":      pc.Name,
 	}
 	jsonData, err := json.Marshal(inviteData)
 	if err != nil {

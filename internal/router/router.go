@@ -72,6 +72,7 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 			main.GET("/tasks", handler.TasksPage)
 			main.GET("/d", handler.TasksDPage)
 			main.GET("/dashboard/settings", m, handler.SettingsPage)
+			main.GET("/dashboard/settings/logs", m, handler.SettingsLogsPage)
 			main.GET("/dashboard/data", m, handler.DataPage)
 			main.GET("/dashboard/cloud", m, handler.CloudPage)
 			main.GET("/dashboard/cloud/class", m, handler.CClassPage)
@@ -111,6 +112,9 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 		tools.POST("/load/network", m, handler.LoadNetwork)
 		tools.POST("/load/storage", m, handler.LoadStorage)
 		tools.GET("/clear", m, handler.Clear)
+		tools.GET("/logs", m, handler.GetLogs)
+		tools.GET("/logs/stats", m, handler.GetLogsStats)
+
 	}
 
 	// Группа маршрутов для компьютеров
@@ -125,11 +129,10 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 		pcApi.POST("/reboot/:id", m, handler.PcReboot)
 		pcApi.POST("/block/:id", m, handler.PcBlock)
 		pcApi.POST("/unblock/:id", m, handler.PcUnBlock)
-		pcApi.GET("/start/:lip", handler.StartPc)
+		pcApi.POST("/start/:id", handler.StartPc)
 		pcApi.GET("/screen/:lip", handler.ScreenPc)
 		pcApi.POST("/link/:lip", handler.LinkPc)
 		pcApi.POST("/ls/:lip", handler.LSPc)
-
 		pcApi.GET("/vnc/:id", handler.VncPC)
 
 	}
@@ -164,9 +167,7 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 
 		cloudApi.POST("/tasks/delivery", handler.TaskDelivery)
 		cloudApi.GET("/tasks/delivery/d/:id", m, handler.DelTaskDel)
-
 		cloudApi.POST("/delivery/all/:id", m, handler.DeliveryAll)
-
 		cloudApi.GET("/delivery/checked/:id", m, handler.DeliveryChecked)
 
 	}

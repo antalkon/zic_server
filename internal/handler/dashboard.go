@@ -3,6 +3,7 @@ package handler
 import (
 	sdashboard "github.com/antalkon/zic_server/internal/services/sDashboard"
 	sdata "github.com/antalkon/zic_server/internal/services/sData"
+	ssettings "github.com/antalkon/zic_server/internal/services/sSettings"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,4 +35,8 @@ func LoadStoragePage(c *gin.Context) {
 // Страница данных
 func DataPage(c *gin.Context) {
 	sdata.LoadDataPage(c)
+}
+
+func SettingsLogsPage(c *gin.Context) {
+	ssettings.SettingsLogsPage(c)
 }

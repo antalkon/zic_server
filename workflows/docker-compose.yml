@@ -1,0 +1,43 @@
+version: '3.8'
+
+networks:
+  wiki-network:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    networks:
+      - wiki-network
+    environment:
+      POSTGRES_USER: wiki
+      POSTGRES_PASSWORD: wikisecret
+      POSTGRES_DB: wikidb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  wikijs:
+    image: requarks/wiki:2
+    container_name: wikijs
+    networks:
+      - wiki-network
+    ports:
+      - "4441:3000" # Порт для доступа к Wiki.js
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: wiki
+      DB_PASS: wikisecret
+      DB_NAME: wikidb
+    depends_on:
+      - postgres
+    restart: always
+    volumes:
+      - wikijs_data:/wiki/data
+
+volumes:
+  postgres_data:
+  wikijs_data:

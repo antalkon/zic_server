@@ -1,21 +1,51 @@
-# Указываем базовый образ с Go
-FROM golang:1.22
+# Этап сборки
+FROM golang:1.22 as builder
 
-# Устанавливаем рабочую директорию внутри контейнера
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем go.mod и go.sum для кэширования зависимостей
+# Копируем файлы для установки зависимостей
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Копируем остальные файлы проекта в контейнер
+# Копируем исходный код
 COPY . .
 
-# Собираем бинарный файл из исходников
-RUN go build -o main ./cmd/myapp/main.go
+# Собираем бинарник
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o server cmd/app/main.go
 
-# Открываем порт 8381 внутри контейнера
-EXPOSE 8080
+# Финальный минимальный, но функциональный образ
+FROM debian:bookworm-slim
 
-# Указываем команду для запуска Go-приложения
-CMD ["/app/main"]
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Устанавливаем базовые зависимости, корневые сертификаты и инструменты
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bash \
+    curl \
+    ca-certificates \
+    net-tools \
+    iputils-ping \
+    vim \
+    libc6 \
+    libstdc++6 \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копируем собранный сервер
+COPY --from=builder /app/server .
+
+# Копируем необходимые данные (опционально)
+COPY --from=builder /app/configs ./configs
+COPY --from=builder /app/data ./data
+COPY --from=builder /app/web ./web
+COPY --from=builder /app/zic.ico ./zic.ico
+
+# Указываем порт приложения
+EXPOSE 8385
+
+# Точка входа
+CMD ["./server"]

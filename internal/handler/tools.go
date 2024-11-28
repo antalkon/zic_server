@@ -8,3 +8,11 @@ import (
 func Clear(c *gin.Context) {
 	stools.Clear(c)
 }
+
+func GetLogs(c *gin.Context) {
+	stools.GetLogs(c)
+}
+
+func GetLogsStats(c *gin.Context) {
+	stools.GetLogsStats(c)
+}

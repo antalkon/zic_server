@@ -36,8 +36,8 @@ func main() {
 		fmt.Println("Ошибка загрузки конфигурации. Проверьте логи.")
 		return
 	}
-
-	// Получаем адрес сервера из конфигурации для отладки
+	sslCertStatus := viper.GetBool("http_server.ssl")
+	// Получаем адрес сервера из конфигурации
 	address := viper.GetString("http_server.address")
 	if address == "" {
 		log.Error(errors.New("Проблема с адресом сервера"))
@@ -67,8 +67,18 @@ func main() {
 		fmt.Println("!!! --- СЕРВЕР НЕ АКТИВИРОВАН --- !!!")
 	}
 
-	// Запуск сервера на адресе
-	if err := r.Run(address); err != nil {
-		log.Error(fmt.Errorf("Ошибка запуска сервера: %w", err))
+	// Проверяем, использовать ли SSL
+	if sslCertStatus {
+		certPath := "configs/cert/server.crt"
+		keyPath := "configs/cert/server.key"
+		if err := r.RunTLS(address, certPath, keyPath); err != nil {
+			log.Error(fmt.Errorf("Ошибка запуска HTTPS-сервера: %w", err))
+			return
+		}
+	} else {
+		// Запуск обычного HTTP-сервера
+		if err := r.Run(address); err != nil {
+			log.Error(fmt.Errorf("Ошибка запуска HTTP-сервера: %w", err))
+		}
 	}
 }

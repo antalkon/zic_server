@@ -8,3 +8,7 @@ tg_bot:
     newtask: true
     sysstat: false
     token: sdfalsedf
+
+pc:
+    password: ""
+    

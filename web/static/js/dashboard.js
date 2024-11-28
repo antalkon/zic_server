@@ -37,7 +37,6 @@ function updatTasksOnlineBlock() {
     sendPostRequest('/cloud/api/sys/count', {}, function(result) {
         const countElement = document.getElementById('room-checked-count');
         const circleElement = document.getElementById('room-checked-circle');  // Исправлено 'rooom' на 'room'
-        console.log(result)
         // Удаляем все классы, кроме базовых
         countElement.className = 'text-3xl font-bold'; // Базовые классы для текста
         circleElement.className = 'w-3 h-3 rounded-full pulse mr-2'; // Базовые классы для кружка

@@ -1,25 +1,27 @@
-<!-- Модальное окно с Tailwind CSS -->
+<!-- Модальное окно с поддержкой темы -->
 <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex justify-center items-center z-50">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <h2 id="modal-title" class="text-xl font-semibold text-gray-800 mb-4">Выберите комнату</h2>
+    <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 id="modal-title" class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Выберите кабинет</h2>
 
         <!-- Выпадающий список комнат -->
-        <select id="roomSelect" class="w-full border border-gray-300 p-2 rounded mb-4">
+        <select id="roomSelect" class="w-full border border-gray-300 dark:border-neutral-700 p-2 rounded mb-4 dark:bg-neutral-700 dark:text-white">
             <!-- Опции будут добавляться через JavaScript -->
         </select>
 
         <!-- Поле ввода текста для пятого окна -->
-        <input type="text" id="modal-input" class="w-full border border-gray-300 p-2 rounded mb-4 hidden" placeholder="Введите URL">
+        <input type="text" id="modal-input" class="w-full border border-gray-300 dark:border-neutral-700 p-2 rounded mb-4 dark:bg-neutral-700 dark:text-white hidden" placeholder="Введите URL">
 
         <!-- Кнопки действий -->
         <div class="flex justify-end space-x-2">
-            <button id="actionButton" class="bg-blue-500 text-white px-4 py-2 rounded">Действие</button>
-            <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Закрыть</button>
+            <button id="actionButton" class="bg-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-4 py-2 rounded">
+                Действие
+            </button>
+            <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-600 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white px-4 py-2 rounded">
+                Закрыть
+            </button>
         </div>
     </div>
 </div>
-
-
 
 
 
@@ -41,23 +43,23 @@ function openModal(actionType) {
     
     switch(actionType) {
         case 'off':
-            title = 'Выключить комнату';
+            title = 'Выключить кабинет';
             actionEndpoint = '/room/api/room/off/';
             break;
         case 'reboot':
-            title = 'Перезагрузить комнату';
+            title = 'Перезагрузить кабинет';
             actionEndpoint = '/room/api/room/reboot/';
             break;
         case 'block':
-            title = 'Заблокировать комнату';
+            title = 'Заблокировать кабинет';
             actionEndpoint = '/room/api/room/block/';
             break;
         case 'unblock':
-            title = 'Разблокировать комнату';
+            title = 'Разблокировать кабинет';
             actionEndpoint = '/room/api/room/unblock/';
             break;
         case 'link':
-            title = 'Ссылка на комнату';
+            title = 'Ссылка на кабинет';
             actionEndpoint = '/room/api/room/link/';
             modalInput.classList.remove("hidden");
             break;

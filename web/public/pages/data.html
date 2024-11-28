@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.title}}</title>
+    <title>{{.title}} | ZIC</title>
     {{template "cBInport.html" .}}
     <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
 </head>
 
 <body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
@@ -29,50 +31,63 @@
     {{template "cFooter.html" .}}
 
     <script>
-        // Функция для загрузки комнат и отрисовки карточек
         async function loadRooms() {
-            try {
-                const response = await fetch('/room/api/room', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Ошибка загрузки данных о комнатах');
-                }
-
-                const rooms = await response.json();
-                const roomsContainer = document.getElementById('rooms-container');
-
-                // Очищаем контейнер перед добавлением новых карточек
-                roomsContainer.innerHTML = '';
-
-                // Проходим по каждой комнате и создаем карточку
-                rooms.forEach(room => {
-                    const roomCard = document.createElement('div');
-                    roomCard.className = "flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70";
-
-                    roomCard.innerHTML = `
-                        <img class="w-full h-48 object-cover rounded-t-xl" src="https://media.istockphoto.com/id/1328489815/photo/modern-classroom-interior.jpg?s=612x612&w=0&k=20&c=Z-l5sFqF0bRnWJqeYydSABoHBLcgE5CW8Zdg4ypaISI=" alt="Room Image">
-                        <div class="p-4">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-white">${room.name} <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium ${room.on ? 'bg-teal-100 text-teal-800' : 'bg-red-100 text-red-800'} rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                ${room.on ? 'Активана' : 'Не активна'}
-                            </span></h3>
-                            <p class="mt-1 text-gray-500 dark:text-neutral-400">Описание комнаты ${room.name}.</p>
-                            <a class="mt-3 py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700" href="/dashboard/data/room/${room.id}">
-                                Открыть страницу
-                            </a>
-                        </div>
-                    `;
-                    roomsContainer.appendChild(roomCard);
-                });
-            } catch (error) {
-                console.error(error);
-                alert("Не удалось загрузить данные о комнатах.");
+    try {
+        const response = await fetch('/room/api/room', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             }
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка загрузки данных о комнатах');
         }
+
+        const rooms = await response.json();
+        const roomsContainer = document.getElementById('rooms-container');
+
+        // Очищаем контейнер перед добавлением новых карточек
+        roomsContainer.innerHTML = '';
+
+        // Проверяем, есть ли комнаты
+        if (rooms.length === 0) {
+            // Добавляем надпись "Вы еще не создавали кабинетов"
+            const emptyMessage = document.createElement('div');
+            emptyMessage.className = "flex items-center justify-center h-full text-xl font-semibold text-gray-500 dark:text-neutral-400";
+            emptyMessage.textContent = "Вы еще не создавали кабинетов";
+
+            // Делаем родительский контейнер flex-контейнером для центрирования
+            roomsContainer.className = "flex items-center justify-center h-64";
+
+            roomsContainer.appendChild(emptyMessage);
+        } else {
+            // Если комнаты есть, создаем карточки
+            roomsContainer.className = "grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+            rooms.forEach(room => {
+                const roomCard = document.createElement('div');
+                roomCard.className = "flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70";
+
+                roomCard.innerHTML = `
+                    <img class="w-full h-48 object-cover rounded-t-xl" src="https://media.istockphoto.com/id/1328489815/photo/modern-classroom-interior.jpg?s=612x612&w=0&k=20&c=Z-l5sFqF0bRnWJqeYydSABoHBLcgE5CW8Zdg4ypaISI=" alt="Room Image">
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">${room.name} <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium ${room.on ? 'bg-teal-100 text-teal-800' : 'bg-red-100 text-red-800'} rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                            ${room.on ? 'Активен' : 'Не активен'}
+                        </span></h3>
+                        <p class="mt-1 text-gray-500 dark:text-neutral-400">Описание кабинета ${room.name}.</p>
+                        <a class="mt-3 py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700" href="/dashboard/data/room/${room.id}">
+                            Открыть страницу
+                        </a>
+                    </div>
+                `;
+                roomsContainer.appendChild(roomCard);
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Не удалось загрузить данные о комнатах.");
+    }
+}
 
         // Загружаем комнаты при загрузке страницы
         document.addEventListener('DOMContentLoaded', loadRooms);
