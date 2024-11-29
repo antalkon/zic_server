@@ -14,40 +14,21 @@ async function controlPC(pcId, action) {
         // Получаем JSON-ответ от сервера
         const result = await response.json();
 
-        if (response.ok && result.success === true) {
+        if (response.ok) {
             // Если успех, показываем тост с сообщением "Успешно"
-            showToast("Успешно");
+            showToast('success', `${result.message}`);
         } else {
             // В противном случае показываем сообщение о неудаче
-            showToast("Не удалось узнать у ПК статус выполнения задачи");
+            showToast('info', `${result.message}`);
         }
     } catch (error) {
         console.error("Ошибка при выполнении запроса:", error);
-        showToast("Ошибка при соединении с сервером.");
+        showToast('error', `${"Ошибка при выполнении запроса"}`);
     } finally {
         // Скрываем экран блокировки после завершения запроса
     }
 }
 
-// Функция показа тоста с сообщением
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    const toastMessage = document.getElementById("toastMessage");
-    
-    toastMessage.textContent = message;
-    toast.classList.remove("hidden");
-
-    // Автоматическое скрытие тоста через 3 секунды
-    setTimeout(() => {
-        hideToast();
-    }, 3000);
-}
-
-// Функция скрытия тоста
-function hideToast() {
-    const toast = document.getElementById("toast");
-    toast.classList.add("hidden");
-}
 
 function openModal(modalId) {
     document.getElementById(modalId).classList.remove('hidden');
@@ -58,32 +39,20 @@ function openModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
   }
 
-  function submitUrlForm(id) {
+  async function submitUrlForm(id) {
     const urlInput = document.getElementById("input-url").value;
+    const data = { url: urlInput };
 
-    const data = { "url": urlInput };
+    const url = `/pc/api/link/${id}`;
+    const response = await postRequestNew(url, data);
+    closeModal('url-modal')
 
-    fetch(`/pc/api/link/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      if (response.ok) {
-        alert("URL отправлен успешно");
-        document.getElementById("url-form").reset(); // Сброс формы
-        closeModal('url-modal'); // Закрываем модальное окно
-      } else {
-        alert("Ошибка при отправке URL:", response.result.error);
-      }
-    })
-    .catch(error => {
-      console.error("Ошибка:", error);
-      alert("Ошибка при отправке URL");
-    });
-  }
+    if (response) {
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
+    }
+}
 
 
   function submitEditPcForm(id) {

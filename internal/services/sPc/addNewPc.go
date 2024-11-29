@@ -32,12 +32,6 @@ func AddPc(c *gin.Context) {
 	pc.ID = uint64(id)
 
 	// Добавление ПК в базу данных
-	if err := pcpg.AddNewPc(&pc); err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		fmt.Println(err)
-
-		return
-	}
 
 	// Получаем локальный и публичный IP
 	pip, lip, err := getip.GetIps()
@@ -63,7 +57,12 @@ func AddPc(c *gin.Context) {
 
 		return
 	}
+	if err := pcpg.AddNewPc(&pc); err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		fmt.Println(err)
 
+		return
+	}
 	// Формирование URL и отправка POST запроса
 	url := fmt.Sprintf("http://%s:3000/server/invite", pc.LIP)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))

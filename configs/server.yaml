@@ -9,4 +9,4 @@ http_server:
 password: alex
 port: "5444"
 user: alex
-version: "1.0(β)"
+version: "1.1(β)"

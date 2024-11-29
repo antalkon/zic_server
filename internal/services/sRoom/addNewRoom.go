@@ -23,5 +23,5 @@ func NewRoom(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"success": "Room added successfully"})
+	c.JSON(200, gin.H{"message": "Комната добавлена успешно!"})
 }

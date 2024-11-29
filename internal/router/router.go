@@ -141,6 +141,7 @@ func SetupRoutes(r *gin.Engine, log logger.Logger) {
 	roomApi := r.Group("/room/api")
 	{
 		roomApi.POST("/new", m, handler.AddNewRoom)
+		roomApi.POST("/del/:id", m, handler.DelRoom)
 		roomApi.POST("/count", m, handler.RoomCount)
 		roomApi.POST("/room", m, handler.RoomsData)
 		roomApi.POST("/room/block/:id", m, handler.BlockRoom)

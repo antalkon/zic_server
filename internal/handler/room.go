@@ -54,3 +54,7 @@ func LinkRoom(c *gin.Context) {
 func LSRoom(c *gin.Context) {
 	sroom.Ls(c)
 }
+
+func DelRoom(c *gin.Context) {
+	sroom.DelRoom(c)
+}

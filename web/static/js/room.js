@@ -19,13 +19,14 @@ async function changeRoomStatus(roomId, action) {
       if (response.ok) {
         // Формируем сообщение на основе ответа
         const message = `Успешно: ${result.success} | Неудачно: ${result.bad}`;
-        showToast(message); // Показать тост с сообщением
+        showToast('success', `${message}`);
+
       } else {
-        showToast("Ошибка при выполнении операции. Попробуйте снова.");
       }
     } catch (error) {
       console.error("Ошибка при выполнении запроса:", error);
-      showToast("Ошибка при соединении с сервером.");
+      showToast('error', 'Ошибка при выполнении запроса.');
+
     } finally {
       // Скрываем экран блокировки после завершения запроса
       hideLockScreen();
@@ -50,41 +51,26 @@ async function controlPC(pcId, action) {
         // Получаем JSON-ответ от сервера
         const result = await response.json();
 
-        if (response.ok && result.success === true) {
+        if (response.ok) {
             // Если успех, показываем тост с сообщением "Успешно"
-            showToast("Успешно");
+            showToast('success', `${result.message}`);
+
         } else {
             // В противном случае показываем сообщение о неудаче
-            showToast("Не удалось узнать у ПК статус выполнения задачи");
+            showToast('error', 'Не удалось определить статус выполнения задачи.');
+
         }
     } catch (error) {
+        showToast('error', 'Ошибка при выполнении запроса.');
+
         console.error("Ошибка при выполнении запроса:", error);
-        showToast("Ошибка при соединении с сервером.");
     } finally {
         // Скрываем экран блокировки после завершения запроса
         hideLockScreen();
     }
 }
 
-// Функция показа тоста с сообщением
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    const toastMessage = document.getElementById("toastMessage");
-    
-    toastMessage.textContent = message;
-    toast.classList.remove("hidden");
 
-    // Автоматическое скрытие тоста через 3 секунды
-    setTimeout(() => {
-        hideToast();
-    }, 3000);
-}
-
-// Функция скрытия тоста
-function hideToast() {
-    const toast = document.getElementById("toast");
-    toast.classList.add("hidden");
-}
 
 // Функции показа и скрытия экрана блокировки
 function showLockScreen() {

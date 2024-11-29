@@ -65,5 +65,5 @@ func Link(c *gin.Context) {
 	wg.Wait()
 
 	// Возвращаем результаты
-	c.JSON(200, gin.H{"success": success, "bad": bad})
+	c.JSON(200, gin.H{"success": success, "bad": bad, "message": "Ссылка отправлена на все доступные ПК!"})
 }
