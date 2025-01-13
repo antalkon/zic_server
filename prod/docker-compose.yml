@@ -17,17 +17,19 @@ services:
 
   # Сервис сервера
   server:
-    image: antalkon/zic_c_server:1.0  # Ваш образ сервера
+    image: antalkon/zic_c_server:2.1  # Ваш образ сервера
     container_name: ZIC_SERVER
     depends_on:
       - db  # Гарантирует, что база данных запустится перед сервером
     restart: always  # Автоматический перезапуск контейнера
     environment:
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: "5432"
       DB_USER: alex
       DB_PASSWORD: alex
+      DB_SSLMODE: disable
       DB_NAME: ZIC-SERVER-main
+
     networks:
       - vpn-network  # Сеть для подключения через VPN (без проброса портов наружу)
     command: ["./server"]  # Запуск вашего Go-сервера

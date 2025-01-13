@@ -45,12 +45,13 @@ func InitDB() error {
 
 	// Формируем строку подключения
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=ZIC-SERVER-main port=%s sslmode=%s",
-		config.GetEnvValue("host"),
-		config.GetEnvValue("user"),
-		config.GetEnvValue("password"),
-		config.GetEnvValue("port"),
-		config.GetEnvValue("sslmode"),
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		config.GetEnvValue("DB_HOST"),     // Используйте "DB_HOST"
+		config.GetEnvValue("DB_USER"),     // Используйте "DB_USER"
+		config.GetEnvValue("DB_PASSWORD"), // Используйте "DB_PASSWORD"
+		config.GetEnvValue("DB_NAME"),     // Убедитесь, что "DB_NAME" тоже используется
+		config.GetEnvValue("DB_PORT"),     // Используйте "DB_PORT"
+		config.GetEnvValue("DB_SSLMODE"),  // Используйте "DB_SSLMODE"
 	)
 
 	// Подключаемся к базе данных

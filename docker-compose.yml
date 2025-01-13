@@ -16,18 +16,18 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   server:
-    image: antalkon/zic_c_server:1.5
+    image: antalkon/zic_c_server:2.1
 
     container_name: ZIC_Server
     depends_on:
       - db
     environment:
-      DB_NAME: ZIC-SERVER-main
       DB_HOST: db
-      DB_PASSWORD: alex
       DB_PORT: "5432"
-      DB_SSLMODE: disable
       DB_USER: alex
+      DB_PASSWORD: alex
+      DB_SSLMODE: disable
+      DB_NAME: ZIC-SERVER-main
     ports:
       - "8385:8385" # Настрой порт для сервера, если нужно
     networks:

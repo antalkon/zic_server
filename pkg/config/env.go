@@ -7,33 +7,46 @@ import (
 	"github.com/spf13/viper"
 )
 
-// LoadEnvConfig загружает конфигурацию из файла .env
+// LoadEnvConfig загружает конфигурацию из системных переменных окружения и .env файла.
 func LoadEnvConfig() error {
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
-	viper.AddConfigPath(".")
+	viper.SetConfigName(".env") // Имя конфигурационного файла
+	viper.SetConfigType("env")  // Формат файла
+	viper.AddConfigPath(".")    // Поиск в текущей директории
+	viper.AddConfigPath("/app") // Поиск в директории приложения
+	viper.AutomaticEnv()        // Подключение системных переменных окружения
 
-	// Читаем файл конфигурации
+	// Читаем файл конфигурации, если он существует
 	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("Error reading .env file: %v", err)
-		return err
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			log.Println("Warning: .env file not found, using environment variables only.")
+		} else {
+			log.Printf("Error reading .env file: %v", err)
+			return err
+		}
+	} else {
+		log.Printf("Loaded configuration from .env file: %s", viper.ConfigFileUsed())
 	}
 
-	// Логируем содержимое
-	log.Printf("Loaded config from .env file: %s", viper.ConfigFileUsed())
-
-	// НЕ используем viper.AutomaticEnv(), чтобы избежать конфликта
 	return nil
 }
 
-// GetEnvValue возвращает значение переменной из .env
+// GetEnvValue возвращает значение переменной из конфигурации.
+// Если переменная не найдена, вызывает панику.
 func GetEnvValue(key string) string {
+	// Сначала пробуем получить значение из окружения
 	value := viper.GetString(key)
+
+	// Если значение пустое, логируем и вызываем панику
+	if value == "" {
+		log.Printf("Error: Key '%s' is not set or empty", key)
+		panic("Missing required environment variable: " + key)
+	}
+
 	log.Printf("Fetching key '%s': value='%s'", key, value)
 	return value
 }
 
-// DebugEnvFile проверяет существование файла .env
+// DebugEnvFile проверяет наличие файла .env в текущей директории.
 func DebugEnvFile() {
 	_, err := os.Stat(".env")
 	if os.IsNotExist(err) {
@@ -41,6 +54,17 @@ func DebugEnvFile() {
 	} else if err != nil {
 		log.Printf("Error checking .env file: %v", err)
 	} else {
-		log.Println(".env file exists")
+		log.Println(".env file exists in the current directory")
 	}
+}
+
+// IsEnvVariableSet проверяет, установлена ли переменная окружения.
+func IsEnvVariableSet(key string) bool {
+	value, exists := os.LookupEnv(key)
+	if exists {
+		log.Printf("Environment variable '%s' is set: value='%s'", key, value)
+	} else {
+		log.Printf("Environment variable '%s' is not set", key)
+	}
+	return exists
 }
