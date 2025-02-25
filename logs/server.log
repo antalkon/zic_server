@@ -2175,3 +2175,5 @@ time="2025-01-13T18:02:59+05:00" level=info msg="Режим сервера: Ра
 time="2025-01-13T18:02:59+05:00" level=fatal msg="failed to connect database: cannot parse `host= user= password=xxxxx dbname= port= sslmode=`: invalid port (strconv.ParseUint: parsing \"sslmode=\": invalid syntax)"
 time="2025-01-13T18:07:45+05:00" level=info msg="Режим сервера: Разработка (Debug)"
 time="2025-01-13T18:12:05+05:00" level=info msg="Режим сервера: Разработка (Debug)"
+time="2025-02-25T20:25:13+05:00" level=info msg="Режим сервера: Разработка (Debug)"
+time="2025-02-25T20:25:13+05:00" level=fatal msg="failed to connect database: failed to connect to `host=127.0.0.1 user=alex database=ZIC-SERVER-main`: dial error (dial tcp 127.0.0.1:5444: connect: connection refused)"
