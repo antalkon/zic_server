@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+    <style>
+        .flash-alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 300px;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background-color: #4299e1; /* Голубой цвет полосы */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            animation: progress 3s linear;
+        }
+
+        @keyframes progress {
+            0% {
+                width: 100%;
+            }
+            100% {
+                width: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-blue-100 flex items-center justify-center h-screen">
+
+    <!-- Контейнер для формы -->
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        
+        <!-- Логотип -->
+        <div class="flex justify-center mb-6">
+            <img src="/static/Zentas.png" alt="Logo" class="rounded-full">
+        </div>
+
+        <!-- Форма входа -->
+        <form id="login-form">
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Логин</label>
+                <input type="text" id="name" name="name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400" placeholder="Введите логин">
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Пароль</label>
+                <input type="password" id="password" name="password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400" placeholder="Введите пароль">
+            </div>
+
+            <!-- Кнопка входа -->
+            <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+                Войти
+            </button>
+        </form>
+    </div>
+
+    <!-- Контейнер для алертов -->
+    <div id="alert-container" class="fixed bottom-0 right-0 p-6 space-y-4"></div>
+
+    <script>
+        // Функция для добавления алерта
+        function showAlert(message, type) {
+            const alertId = `alert-${Date.now()}`;
+            const alertHtml = `
+                <div id="${alertId}" class="flash-alert bg-${type === 'success' ? 'green' : 'red'}-500 text-white relative">
+                    <span>${message}</span>
+                    <span class="absolute top-2 right-2 cursor-pointer" onclick="$('#${alertId}').remove()">×</span>
+                    <div class="progress-bar"></div>
+                </div>
+            `;
+
+            $('#alert-container').append(alertHtml);
+
+            // Через 3 секунды плавно убираем алерт
+            setTimeout(function() {
+                $(`#${alertId}`).fadeOut(500, function() {
+                    $(this).remove();
+                });
+            }, 3000);
+        }
+
+        // Обработка отправки формы
+        $('#login-form').on('submit', function(e) {
+            e.preventDefault();
+
+            // Собираем данные формы
+            const name = $('#name').val();
+            const password = $('#password').val();
+
+            // Отправляем AJAX-запрос на сервер
+            $.ajax({
+                url: '/auth/api/login',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ name, password }),
+                success: function(response) {
+                    // Если успешный логин, показываем зеленый алерт
+                    showAlert('Успешный вход!', 'success');
+                    location.replace('/dashboard')
+                },
+                error: function(xhr) {
+                    // Если ошибка, показываем красный алерт
+                    showAlert('Ошибка: Неправильные данные для входа', 'error');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

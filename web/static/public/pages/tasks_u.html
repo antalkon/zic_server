@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Учебные Задания</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+  <style>
+    /* Мягкий плавный фон с бесшовной анимацией */
+    body {
+      background: radial-gradient(circle at 0% 50%, rgba(74, 163, 223, 0.6), rgba(135, 206, 250, 0.5), rgba(209, 236, 255, 0.4), rgba(255, 255, 255, 0.3));
+      background-size: 400% 400%;
+      animation: smoothWave 20s linear infinite;
+    }
+
+    @keyframes smoothWave {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Оптимизированные и крупные заголовки и текст */
+    h1 {
+      font-size: clamp(4rem, 10vw, 5.5rem);
+      color: #1a1a1a;
+      line-height: 1.1;
+    }
+
+    h2 {
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      color: #2a2a2a;
+      line-height: 1.2;
+    }
+
+    /* Размеры для кнопок и select */
+    button, select {
+      font-size: 1.4rem;
+    }
+
+    /* Упрощенный контейнер с четкими границами */
+    .content-container {
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 1rem;
+    }
+  </style>
+</head>
+<body class="font-sans leading-normal tracking-normal text-gray-800 min-h-screen flex flex-col items-center justify-center">
+
+  <!-- Main Container -->
+  <div class="content-container w-full max-w-lg mx-auto px-4 py-6 shadow-lg rounded-xl transition duration-200">
+
+    <!-- Header -->
+    <h1 class="text-center text-2xl font-bold text-gray-900 mb-6 drop-shadow-lg">
+      📘 Учебные Задания
+    </h1>
+
+    <!-- Class Selection Form -->
+    <div class="mb-6 p-4">
+      <h2 class="text-center font-semibold text-gray-800 mb-4">
+        Выберите Класс
+      </h2>
+      <form id="classSelectionForm" class="flex flex-col items-center space-y-3 w-full">
+        <select id="classSelect" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition" required>
+          <option value="">Выберите класс</option>
+        </select>
+        <button type="submit" class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+          Выбрать
+        </button>
+      </form>
+    </div>
+
+    <!-- Tasks Display -->
+    <div id="tasksSection" class="hidden bg-white p-4 rounded-lg shadow-md">
+      <h2 class="text-center font-semibold text-gray-700 mb-4">
+        Список Заданий
+      </h2>
+      <ul id="tasksList" class="space-y-3"></ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center mt-6 text-gray-500 text-base w-full">
+    ZIC Tasks Center V1.0 (β)
+  </footer>
+
+  <script>
+    // Загружаем классы при загрузке страницы
+    document.addEventListener("DOMContentLoaded", async () => {
+      const classSelect = document.getElementById("classSelect");
+      try {
+        const response = await fetch("/cloud/api/classes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const classes = await response.json();
+
+        // Заполняем выпадающий список классами
+        classes.forEach(cls => {
+          const option = document.createElement("option");
+          option.value = cls.id;
+          option.textContent = `${cls.number}${cls.letter}`;
+          classSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Ошибка загрузки классов:", error);
+      }
+    });
+
+    // Обрабатываем выбор класса
+    document.getElementById("classSelectionForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const selectedClassId = document.getElementById("classSelect").value;
+      if (!selectedClassId) return;
+
+      try {
+        const response = await fetch(`/cloud/api/tasks/class/${selectedClassId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const tasks = await response.json();
+        
+        // Отображаем задания
+        const tasksList = document.getElementById("tasksList");
+        tasksList.innerHTML = ""; // Очищаем предыдущие задания
+        tasks.forEach(task => {
+          const listItem = document.createElement("li");
+          listItem.className = "flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm transition duration-150 hover:bg-blue-100";
+          listItem.innerHTML = `
+            <span class="text-lg font-medium text-gray-800">${task.title}</span>
+            <a href="/tasks/${task.folder_id}/${task.file}" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 focus:outline-none transition" download>
+              Скачать
+            </a>
+          `;
+          tasksList.appendChild(listItem);
+        });
+        
+        // Показываем блок с заданиями
+        document.getElementById("tasksSection").classList.remove("hidden");
+      } catch (error) {
+        console.error("Ошибка загрузки заданий:", error);
+      }
+    });
+  </script>
+</body>
+</html>

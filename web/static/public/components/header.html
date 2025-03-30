@@ -1,0 +1,152 @@
+<div id="notify-1" data-notify-id="notify-1" class="hidden flex items-center justify-between gap-4 bg-red-500 px-4 py-1 text-white">
+  <p class="text-sm font-medium">
+    Это Open-Source версия панели. В ней присутствуют Ограничения по функционалу и безопасности.
+    <a href="https://github.com/ZentasIT/ZIC_Server" class="inline-block underline">Сделать вклад в развитие</a>
+  </p>
+  
+    <button
+      aria-label="Dismiss"
+      onclick="dismissNotification('notify-1')"
+      class="shrink-0 rounded-lg bg-black/10 p-1 transition hover:bg-black/20"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20" fill="currentColor">
+        <path
+          fill-rule="evenodd"
+          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </button>
+  </div>
+<header class="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-3 dark:bg-neutral-800 overflow-hidden">
+  <div class="snow-container absolute inset-0 pointer-events-none z-10"></div> <!-- Контейнер для снега -->
+  <nav class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between relative z-20">
+      <div class="flex items-center justify-between">
+          <a class="flex-none text-xl font-semibold dark:text-white focus:outline-none focus:opacity-80" href="/dashboard" aria-label="Brand">
+              <span class="inline-flex items-center gap-x-2 text-xl font-semibold dark:text-white">
+                  <img class="w-10 h-auto" src="/static/Zentas.png" alt="Logo">
+                  ZIC Panel <span class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-white/10 dark:text-white">Версия: <span id="version"></span></span>
+              </span>
+          </a>
+          <div class="sm:hidden">
+              <button type="button" class="relative flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10" onclick="toggleMobileMenu()">
+                  <svg id="burger-icon" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                  <svg id="close-icon" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                  <span class="sr-only">Toggle navigation</span>
+              </button>
+          </div>
+      </div>
+      <div id="mobileMenu" class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block" aria-labelledby="hs-navbar-example-collapse">
+          <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:pl-5">
+              <a class="font-medium {{if eq .page "home"}}text-blue-500{{else}}text-gray-600 hover:text-gray-400{{end}}" href="/dashboard" aria-current="page">Главная</a>
+              <a class="font-medium {{if eq .page "data"}}text-blue-500{{else}}text-gray-600 hover:text-gray-400{{end}}" href="/dashboard/data">Данные</a>
+              <a class="font-medium {{if eq .page "cloud"}}text-blue-500{{else}}text-gray-600 hover:text-gray-400{{end}}" href="/dashboard/cloud">Облако </a>
+              <a class="font-medium {{if eq .page "settings"}}text-blue-500{{else}}text-gray-600 hover:text-gray-400{{end}}" href="/dashboard/settings">Настройки</a>
+          </div>
+      </div>
+  </nav>
+</header>
+<script src="/static/js/header.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+  // Инициализация уведомлений
+  const notifications = document.querySelectorAll('[data-notify-id]');
+  
+  notifications.forEach(notification => {
+    const notifyId = notification.getAttribute('data-notify-id');
+    
+    // Проверяем, есть ли уведомление в localStorage
+    if (!localStorage.getItem(notifyId)) {
+      notification.classList.remove('hidden'); // Показываем уведомление
+    }
+  });
+});
+
+// Функция для закрытия уведомления
+function dismissNotification(notifyId) {
+  // Сохраняем состояние в localStorage
+  localStorage.setItem(notifyId, 'dismissed');
+  
+  // Скрываем уведомление на странице
+  const notification = document.querySelector(`[data-notify-id="${notifyId}"]`);
+  if (notification) {
+    notification.classList.add('hidden');
+  }
+}
+</script>
+<script>
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        const burgerIcon = document.getElementById('burger-icon');
+        const closeIcon = document.getElementById('close-icon');
+        
+        // Toggle visibility of mobile menu
+        mobileMenu.classList.toggle('hidden');
+        
+        // Toggle burger and close icons
+        burgerIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+    }
+
+    // Функция для создания анимации снега
+    function createSnowflakes() {
+        const snowContainer = document.querySelector('.snow-container');
+        if (!snowContainer) return;
+
+        // Создаём снежинку
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.style.left = Math.random() * 100 + '%';
+
+        // Увеличиваем длительность анимации
+        snowflake.style.animationDuration = Math.random() * 5 + 5 + 's'; // Длительность от 5 до 10 секунд
+        snowflake.style.opacity = Math.random();
+
+        // Добавляем снежинку в контейнер
+        snowContainer.appendChild(snowflake);
+
+        // Удаляем снежинку после завершения анимации
+        setTimeout(() => {
+            snowflake.remove();
+        }, 11000); // Увеличено для соответствия длительности анимации
+    }
+
+    // Запускаем снег
+    setInterval(createSnowflakes, 300); // И
+
+    // Запускаем снег
+    setInterval(createSnowflakes, 2000);
+    
+</script>
+
+<style>
+  .snow-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+  }
+
+  .snowflake {
+      position: absolute;
+      top: -10px;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+      animation: fall linear infinite;
+  }
+
+  @keyframes fall {
+      0% {
+          transform: translateY(0) rotate(0deg);
+      }
+      100% {
+          transform: translateY(100vh) rotate(360deg);
+      }
+  }
+</style>

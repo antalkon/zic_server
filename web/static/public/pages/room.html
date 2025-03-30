@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}} | ZIC</title>
+    {{template "cBInport.html" .}}
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body class="flex flex-col min-h-screen bg-white text-gray-800 dark:bg-neutral-900 dark:text-white">
+    {{template "cRoomAction.html" .}}
+    {{template "header.html" .}}
+    {{template "cRoomModal.html" .}}
+    {{template "toasts.html" .}}
+
+
+
+    <main class="flex-grow px-4 py-4 mt-3 w-full max-w-[96%] mx-auto">
+        <!-- Бокс "Действия с кабинетом" -->
+        <section class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 shadow-md mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Действия с кабинетом</h2>
+            <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+                <!-- Статистика о компьютерах в комнате -->
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Запущено компьютеров</h3>
+                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{.on}} из {{.count}}</p>
+                </div>
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Заблокировано</h3>
+                    <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{.blocked}}</p>
+                </div>
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Доступно</h3>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{.worked}}</p>
+                </div>
+                <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm text-center">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Неактивных</h3>
+                    <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{.off}}</p>
+                </div>
+            </div>
+            <hr class="my-4 border-gray-200 dark:border-neutral-700">
+            <div class="flex flex-wrap gap-2">
+                <button onclick="changeRoomStatus('{{.id}}', 'off')" class="py-2 px-4 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none">Выключить все ПК</button>
+                <button onclick="changeRoomStatus('{{.id}}', 'block')" class="py-2 px-4 rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 focus:outline-none">Заблокировать все ПК</button>
+                <button onclick="changeRoomStatus('{{.id}}', 'unblock')" class="py-2 px-4 rounded-lg bg-green-600 text-white hover:bg-green-700 focus:outline-none">Разблокировать все ПК</button>
+                <button onclick="changeRoomStatus('{{.id}}', 'reboot')" class="py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Перезагрузить все ПК</button>
+                <button onclick="openModal('url-modal')" class="py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Отправить ссылку</button>
+                <button onclick="changeRoomStatus('{{.id}}', 'ls')" class="py-2 px-4 rounded-lg bg-orange-600 text-white hover:bg-orange-700 focus:outline-none">Lock Screen</button>
+            </div>
+            <br>
+            <p class="text-xs text-red-500">После выполнения действия отображаемые данные обновляются от 1 до 10 минут. Чтобы отображаемые данные обновились перезагрузите страницу.</p>
+        </section>
+
+        <!-- Бокс "Таблица" для компьютеров в комнате -->
+        <section class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 shadow-md">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Список компьютеров в комнате <span onclick="openModal('add-computer-modal')" class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500 cursor-pointer">
+                🖥️ Добавить ПК
+            </span></h2>
+                <div class="overflow-x-auto">
+                <table class="min-w-full bg-white dark:bg-neutral-900 rounded-lg overflow-hidden shadow-lg">
+                    <thead>
+                        <tr class="text-left border-b border-gray-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-white">
+                            <th class="p-4">ID</th>
+                            <th class="p-4">IP</th>
+                            <th class="p-4">Имя</th>
+                            <th class="p-4">Статус</th>
+                            <th class="p-4">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 dark:text-neutral-300">
+                        {{range .allPc}}
+                        <tr class="border-b border-gray-200 dark:border-neutral-700">
+                            <td class="p-4">{{.ID}}</td>
+                            <td class="p-4">{{.LIP}} / <a href="#" class="text-blue-400">{{.PIP}}</a></td>
+                            <td class="p-4">{{.Name}}</td>
+                            <td class="p-4 {{if .On}}text-green-600 dark:text-green-400{{else}}text-red-600 dark:text-red-400{{end}}">
+                                {{if .On}}
+                                    Включен /
+                                    {{if eq .Status "work"}}
+                                        <span class="text-green-600">Работает</span>
+                                    {{else}}
+                                        <span class="text-red-600">Блок</span>
+                                    {{end}}
+                                {{else}}
+                                    Выключен
+                                {{end}}
+                            </td>
+                            <td class="p-4 flex flex-wrap gap-2">
+                                <button onclick="controlPC('{{.ID}}', 'off')" class="py-1 px-3 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none">Выключить</button>
+                                <button onclick="controlPC('{{.ID}}', 'reboot')" class="py-1 px-3 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">Перезагрузить</button>
+                                <button onclick="controlPC('{{.ID}}', 'block')" class="py-1 px-3 text-sm rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 focus:outline-none">Заблокировать</button>
+                                <button onclick="controlPC('{{.ID}}', 'unblock')" class="py-1 px-3 text-sm rounded-lg bg-green-600 text-white hover:bg-green-700 focus:outline-none">Разблокировать</button>
+                                <button onclick="controlPC('{{.LIP}}', 'ls')" class="py-1 px-3 text-sm rounded-lg bg-orange-600 text-white hover:bg-orange-700 focus:outline-none">Lock Screen</button>
+                                <a href="/static/noVNC/vnc.html?autoconnect=false&path=/pc/api/vnc/{{.ID}}" target="_blank" class="py-1 px-3 text-sm rounded-lg bg-violet-600 text-white hover:bg-green-700 focus:outline-none">R/C</button>
+                                <a href="/dashboard/data/pc/{{.ID}}" class="py-1 px-3 text-sm rounded-lg bg-gray-600 text-white hover:bg-gray-700 focus:outline-none">Открыть</a>
+                            </td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <p class="text-xs text-red-500">После выполнения действия отображаемые данные обновляются от 1 до 10 минут. Чтобы отображаемые данные обновились перезагрузите страницу.</p>
+        </section>
+
+        <!-- Секция "Настройки кабинета" -->
+        <section class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-6 shadow-md mt-6">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Настройки кабинета</h2>
+            <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow-sm flex justify-between items-center">
+                <p class="text-lg font-semibold text-gray-800 dark:text-gray-300">Действия</p>
+                <button 
+                    onclick="openDeleteModal('{{.id}}')" 
+                    class="flex items-center gap-2 py-2 px-4 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M9 6v12m6-12v12M4 6h16l-1.5 14H5.5L4 6z" />
+                    </svg>
+                    Удалить
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    {{template "cFooter.html" .}}
+
+    <!-- JavaScript для отправки POST-запросов -->
+    <script src="/static/js/newPost.js"></script>
+
+    <script src="/static/js/room.js"></script>
+
+</body>
+</html>

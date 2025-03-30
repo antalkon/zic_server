@@ -1,0 +1,143 @@
+<!-- Существующее модальное окно для добавления кабинета -->
+<div id="add-computer-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white dark:bg-neutral-800 w-full max-w-lg p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Добавить кабинет</h3>
+      <button onclick="closeModal('add-computer-modal')" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">&times;</button>
+    </div>
+    <form id="add-computer-form" class="space-y-4">
+      <div>
+        <label for="computer-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Введите название кабинета</label>
+        <input 
+          type="text" 
+          id="computer-name" 
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-md shadow-sm focus:ring focus:ring-opacity-50 dark:bg-neutral-700 dark:text-white" 
+          required>
+      </div>
+    </form>
+    <div class="mt-4 flex justify-end space-x-2">
+      <button 
+        onclick="closeModal('add-computer-modal')" 
+        class="px-4 py-2 bg-gray-200 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-neutral-600">
+        Закрыть
+      </button>
+      <button 
+        onclick="submitComputerForm()" 
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+        Добавить
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Новое модальное окно для ввода URL -->
+<div id="url-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">Ввести URL</h3>
+      <button onclick="closeModal('url-modal')" class="text-gray-500 hover:text-gray-700">&times;</button>
+    </div>
+    <form id="url-form" class="space-y-4">
+      <div>
+        <label for="input-url" class="block text-sm font-medium text-gray-700">Введите URL</label>
+        <input type="url" id="input-url" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+      </div>
+    </form>
+    <div class="mt-4 flex justify-end space-x-2">
+      <button onclick="closeModal('url-modal')" class="px-4 py-2 bg-gray-200 rounded-md">Закрыть</button>
+      <button onclick="submitUrlForm()" class="px-4 py-2 bg-blue-600 text-white rounded-md">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Новое модальное окно для удаления комнаты -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full">
+      <div class="p-4">
+          <h3 class="text-lg font-bold text-gray-800 dark:text-white">Удалить кабинеи</h3>
+          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Вы уверены, что хотите удалить этот кабинет? Это действие необратимо.</p>
+      </div>
+      <div class="flex justify-end p-4 gap-2">
+          <button id="cancelButtonD" class="py-2 px-4 text-sm font-medium rounded-lg border bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:bg-gray-200">
+              Отмена
+          </button>
+          <button id="confirmButtonD" class="py-2 px-4 text-sm font-medium rounded-lg border bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:bg-red-700">
+              Удалить
+          </button>
+      </div>
+  </div>
+</div>
+<script>
+  // Функция для открытия модального окна
+function openModal(modalId) {
+    document.getElementById(modalId).classList.remove('hidden');
+}
+
+// Функция для закрытия модального окна
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+
+// Функция для отправки формы добавления кабинета
+async function submitComputerForm() {
+    const name = document.getElementById("computer-name").value;
+
+    const data = { name };
+
+    const url = `/room/api/new`; // URL для создания кабинета
+    const response = await postRequestNew(url, data); // Отправка POST-запроса
+
+    closeModal('add-computer-modal'); // Закрыть модальное окно
+
+    if (response) {
+        setTimeout(() => {
+            location.reload(); // Перезагрузка страницы через 3.5 секунды
+        }, 3500);
+    }
+}
+
+// Функция для отправки формы с URL
+function submitUrlForm() {
+    const urlInput = document.getElementById("input-url").value;
+
+    const data = { url: urlInput };
+
+    fetch(`/room/api/room/link`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    })
+        .then((response) => {
+            if (response.ok) {
+                alert("URL отправлен успешно");
+                document.getElementById("url-form").reset();
+                closeModal("url-modal");
+            } else {
+                alert("Ошибка при отправке URL");
+            }
+        })
+        .catch((error) => {
+            console.error("Ошибка:", error);
+            alert("Ошибка при отправке URL");
+        });
+}
+
+// Функция для подтверждения удаления комнаты
+document.getElementById('confirmButtonD').addEventListener('click', async () => {
+    if (roomIdToDelete) {
+        const url = `/room/api/del/${roomIdToDelete}`; // URL для удаления комнаты
+        const response = await postRequestNew(url, {}); // Отправка POST-запроса
+        closeModal('deleteModal'); // Закрытие модального окна
+
+        if (response) {
+            setTimeout(() => {
+                location.reload(); // Перезагрузка страницы через 3.5 секунды
+            }, 3500);
+        }
+    }
+});
+
+document.getElementById('cancelButtonD').addEventListener('click', () => {
+    closeModal('deleteModal');
+});
+</script>
