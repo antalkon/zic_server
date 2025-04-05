@@ -1,44 +1,79 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  db:
-    image: postgres:latest
-    container_name: ZIC_DB_pg
-    environment:
-      POSTGRES_USER: alex
-      POSTGRES_PASSWORD: alex
-      POSTGRES_DB: ZIC-SERVER-main
-    ports:
-      - "5444:5432"
-    networks:
-      - zic_network
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-
-  server:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-
-    container_name: ZIC_Server
+    container_name: backend_app
     depends_on:
       - db
+      - redis
+      - minio
     environment:
-      DB_HOST: db
+      SERVER_ADDRESS: ":8080"
+      SERVER_ENV: "prod"
+      DB_HOST: "db"
       DB_PORT: "5432"
-      DB_USER: alex
-      DB_PASSWORD: alex
-      DB_SSLMODE: disable
-      DB_NAME: ZIC-SERVER-main
+      DB_USER: "postgres"
+      DB_PASS: "yourpassword"
+      DB_NAME: "mydatabase"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+      S3_ENDPOINT: "http://minio:9000"
+      S3_ACCESS_KEY: "minioadmin"
+      S3_SECRET_KEY: "minioadmin"
+      S3_BUCKET: "mybucket"
+      S3_USE_SSL: "false"
     ports:
-      - "8385:8385" 
+      - "8080:8080"
     networks:
-      - zic_network
+      - backend_network
 
-networks:
-  zic_network:
-    driver: bridge
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "yourpassword"
+      POSTGRES_DB: "mydatabase"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend_network
 
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - backend_network
+
+  minio:
+    image: minio/minio
+    container_name: minio_storage
+    restart: always
+    command: server --console-address ":9001" /data
+    environment:
+      MINIO_ROOT_USER: "minioadmin"
+      MINIO_ROOT_PASSWORD: "minioadmin"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - backend_network
 
 volumes:
-  pg_data:
+  postgres_data:
+  minio_data:
+
+networks:
+  backend_network:
+    driver: bridge

@@ -1,51 +1,27 @@
-# Этап сборки
-FROM golang:1.22 as builder
+FROM golang:1.23-alpine AS builder
 
-# Устанавливаем рабочую директорию
+RUN apk update && apk add --no-cache \
+    ca-certificates git gcc g++ libc-dev binutils
+
 WORKDIR /app
 
-# Копируем файлы для установки зависимостей
 COPY go.mod go.sum ./
-RUN go mod download
+RUN go mod download && go mod verify && go mod tidy
 
-# Копируем исходный код
 COPY . .
 
-# Собираем бинарник
-ARG TARGETOS=linux
-ARG TARGETARCH=amd64
-RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o server cmd/app/main.go
+RUN go build -o bin/application ./cmd/backend
 
-# Финальный минимальный, но функциональный образ
-FROM debian:bookworm-slim
+FROM alpine:3.21 AS runner
 
-# Устанавливаем рабочую директорию
+RUN apk add --no-cache \
+    ca-certificates libc6-compat openssh bash \
+    && rm -rf /var/cache/apk/*
+
 WORKDIR /app
 
-# Устанавливаем базовые зависимости, корневые сертификаты и инструменты
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash \
-    curl \
-    ca-certificates \
-    net-tools \
-    iputils-ping \
-    vim \
-    libc6 \
-    libstdc++6 \
-    && update-ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /app/bin/application ./
 
-# Копируем собранный сервер
-COPY --from=builder /app/server .
+ENV APP_ENV=prod
 
-# Копируем необходимые данные (опционально)
-COPY --from=builder /app/configs ./configs
-COPY --from=builder /app/data ./data
-COPY --from=builder /app/web ./web
-COPY --from=builder /app/zic.ico ./zic.ico
-
-# Указываем порт приложения
-EXPOSE 8385
-
-# Точка входа
-CMD ["./server"]
+CMD ["./application"]

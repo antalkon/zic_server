@@ -1,20 +1,27 @@
-// Computer модель
 package models
 
-// модель компьюетар в базе
-type Computer struct {
-	ID     uint64 `gorm:"primaryKey;autoIncrement:false" json:"id"` // Указываем, что ID хранится как bigint
-	RoomID uint64 `gorm:"not null" json:"room"`                     // RoomID больше не связан с таблицей Room
-	Name   string `gorm:"size:55;not null" json:"name"`
-	LIP    string `gorm:"size:255;not null;unique" json:"lip"`
-	PIP    string `gorm:"size:255;not null" json:"pip"`
-	Status string `gorm:"size:255;default:'Н/Д...'" json:"status"`
-	On     bool   `gorm:"default:true" json:"on"`
-}
+import (
+	"time"
 
-// модель количества компьютеров в базе
-type PcCount struct {
-	Count int64  `json:"count"`
-	On    int64  `json:"on"`
-	Color string `json:"color"`
+	"github.com/google/uuid"
+)
+
+type Computer struct {
+	ID            uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
+	Room          uuid.UUID `gorm:"type:uuid;not null"`
+	Name          string    `gorm:"size:255;not null"`
+	Location      string    `gorm:"size:255"`
+	Description   string    `gorm:"size:255"`
+	PublicIP      string    `gorm:"size:255;not null"`
+	LocalIP       string    `gorm:"size:255"`
+	OS            string    `gorm:"size:255;not null"`
+	ClientVersion string    `gorm:"size:255;not null"`
+	Secret        string    `gorm:"size:255;not null"`
+	Status        string    `gorm:"size:255;not null"` // on | off
+	Blocked       bool      `gorm:"not null;default:false"`
+	Bage          string    `gorm:"size:255;not null;default:'none'"`
+	CreatedAt     time.Time `gorm:"not null"`
+	LastActivity  time.Time `gorm:"not null"`
+	UpdatedAt     time.Time
+	Comment       string `gorm:"size:255"`
 }
